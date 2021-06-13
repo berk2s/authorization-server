@@ -1,0 +1,4 @@
+
+authorization-server:
+  login-url: /login
+  register-url: /register
