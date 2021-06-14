@@ -1,7 +1,35 @@
+spring:
+  profiles:
+    active: local
+  redis:
+    host: 192.168.1.37
+  jpa:
+    properties:
+      hibernate:
+        show-sql: true
+        use-sql-comments: true
+        format-sql: true
+    #   open-in-view: false
+    database-platform: org.hibernate.dialect.H2Dialect
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
 
 authorization-server:
   login-url: /signin
-
-spring:
-  redis:
-    host: 192.168.1.37
+  private-key-path: private.key
+  public-key-path: public.json
+  issuer: http://localhost:${server.port}/
+  access-token:
+    default-format: jwt
+    lifetime: 1m
+  id-token:
+    lifetime: 1m
+  refresh-token:
+    lifetime: 8h
+    max-lifetime: 8
