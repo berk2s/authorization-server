@@ -51,7 +51,7 @@ public enum ErrorDesc {
      */
     INVALID_REDIRECT_URI("Invalid redirect uri"),
     /**
-     * RutinimUserDetailsService Exception Descriptions
+     * SecurityUserDetails Exception Descriptions
      */
     INVALID_USER("Invalid user");
 

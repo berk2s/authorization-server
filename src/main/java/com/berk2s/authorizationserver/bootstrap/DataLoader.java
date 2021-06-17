@@ -30,6 +30,7 @@ public class DataLoader implements CommandLineRunner {
     private void loadClients() throws URISyntaxException {
         Client client = new Client();
         client.setClientId("clientId");
+        client.setClientSecret(passwordEncoder.encode(""));
         client.setConfidential(false);
         client.setRedirectUris(Set.of(new URI("http://redirect-uri")));
         client.setGrantTypes(Set.of(GrantType.AUTHORIZATION_CODE,
@@ -61,7 +62,7 @@ public class DataLoader implements CommandLineRunner {
 
         Client client4 = new Client();
         client4.setClientId("clientWithoutClientCredentials");
-        client4.setClientSecret("clientSecret");
+        client3.setClientSecret(passwordEncoder.encode("clientSecret"));
         client4.setConfidential(true);
         client4.setRedirectUris(Set.of(new URI("http://redirect-uri")));
         client4.setGrantTypes(Set.of(GrantType.PASSWORD,
@@ -69,6 +70,16 @@ public class DataLoader implements CommandLineRunner {
                 GrantType.AUTHORIZATION_CODE,
                 GrantType.TOKEN_EXCHANGE));
 
-        clientRepository.saveAll(Set.of(client, client2, client3, client4));
+        Client client5 = new Client();
+        client5.setClientId("clientWithoutPassword");
+        client5.setClientSecret(passwordEncoder.encode("clientSecret"));
+        client5.setConfidential(true);
+        client5.setRedirectUris(Set.of(new URI("http://redirect-uri")));
+        client5.setGrantTypes(Set.of(GrantType.CLIENT_CREDENTIALS,
+                GrantType.REFRESH_TOKEN,
+                GrantType.AUTHORIZATION_CODE,
+                GrantType.TOKEN_EXCHANGE));
+
+        clientRepository.saveAll(Set.of(client, client2, client3, client4, client5));
     }
 }

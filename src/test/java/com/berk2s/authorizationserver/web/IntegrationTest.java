@@ -35,9 +35,9 @@ public abstract class IntegrationTest {
     public User getUser() {
         User user = new User();
         user.setUsername(RandomStringUtils.random(12));
+        user.setPassword(passwordEncoder.encode("password"));
         user.setEmail(RandomStringUtils.random(5));
         user.setPhoneNumber(RandomStringUtils.random(5));
-        user.setPassword(passwordEncoder.encode("password"));
         user.setAccountNonExpired(true);
         user.setEnabled(true);
         user.setCredentialsNonExpired(true);
