@@ -1,6 +1,6 @@
-package com.berk2s.authorizationserver.domain;
+package com.berk2s.authorizationserver.domain.user;
 
-import com.berk2s.authorizationserver.domain.user.BaseEntity;
+import com.berk2s.authorizationserver.domain.BaseEntity;
 import com.berk2s.authorizationserver.domain.user.User;
 import lombok.*;
 

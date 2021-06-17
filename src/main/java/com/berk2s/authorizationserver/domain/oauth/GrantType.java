@@ -1,4 +1,4 @@
-package com.berk2s.authorizationserver.domain;
+package com.berk2s.authorizationserver.domain.oauth;
 
 public enum GrantType {
     AUTHORIZATION_CODE("authorization_code"),

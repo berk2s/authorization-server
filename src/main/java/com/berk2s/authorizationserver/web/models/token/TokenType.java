@@ -1,6 +1,10 @@
-package com.berk2s.authorizationserver.web.models;
+package com.berk2s.authorizationserver.web.models.token;
 
 public enum TokenType {
-    JWT,
-    OPAQUE
+    JWT("JWT"),
+    OPAQUE("OPAQUE"),
+    BEARER("Bearer");
+
+    TokenType(String type) {
+    }
 }

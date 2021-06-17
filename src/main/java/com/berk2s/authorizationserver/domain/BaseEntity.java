@@ -1,4 +1,4 @@
-package com.berk2s.authorizationserver.domain.user;
+package com.berk2s.authorizationserver.domain;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -1,5 +1,6 @@
-package com.berk2s.authorizationserver.domain;
+package com.berk2s.authorizationserver.domain.user;
 
+import com.berk2s.authorizationserver.domain.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,7 +13,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 @Entity
-public class Authority extends BaseEntity{
+public class Authority extends BaseEntity {
 
     @Column(name = "authority_name", unique = true)
     private String authorityName;

@@ -1,4 +1,4 @@
-package com.berk2s.authorizationserver.web.models;
+package com.berk2s.authorizationserver.web.models.token;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
