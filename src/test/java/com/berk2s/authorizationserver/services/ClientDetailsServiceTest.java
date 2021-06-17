@@ -1,9 +1,10 @@
-package com.berk2s.authorizationserver.services.impl;
+package com.berk2s.authorizationserver.services;
 
 import com.berk2s.authorizationserver.domain.oauth.Client;
 import com.berk2s.authorizationserver.domain.oauth.GrantType;
 import com.berk2s.authorizationserver.repository.ClientRepository;
 import com.berk2s.authorizationserver.security.SecurityClientDetails;
+import com.berk2s.authorizationserver.services.impl.ClientDetailsService;
 import com.berk2s.authorizationserver.web.models.ErrorDesc;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

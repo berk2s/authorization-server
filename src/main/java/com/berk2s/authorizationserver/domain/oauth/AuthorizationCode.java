@@ -1,4 +1,4 @@
-package com.berk2s.authorizationserver.domain;
+package com.berk2s.authorizationserver.domain.oauth;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 public class AuthorizationCode {
 
     @Id
+    @Indexed
     private Long id;
 
     @Indexed

@@ -19,7 +19,7 @@ import java.security.spec.InvalidKeySpecException;
 
 @Getter
 @Component
-public class JwtPkiConfig {
+public class JwtPkiConfiguration {
 
     private RSAKey publicKey;
 
@@ -36,7 +36,7 @@ public class JwtPkiConfig {
     private final String publicKeyPath;
 
 
-    public JwtPkiConfig(ServerConfiguration serverConfiguration) {
+    public JwtPkiConfiguration(ServerConfiguration serverConfiguration) {
         this.issuer = serverConfiguration.getIssuer().toString();
         this.privateKeyPath = serverConfiguration.getPrivateKeyPath();
         this.publicKeyPath = serverConfiguration.getPublicKeyPath();

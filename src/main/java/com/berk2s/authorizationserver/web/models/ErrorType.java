@@ -1,4 +1,4 @@
-package com.berk2s.authorizationserver.utils;
+package com.berk2s.authorizationserver.web.models;
 
 import lombok.Getter;
 

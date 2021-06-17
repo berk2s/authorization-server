@@ -1,12 +1,12 @@
 package com.berk2s.authorizationserver.utils;
 
-public enum AuthenticationType {
+public enum AuthorizationType {
     BEARER("Bearer"),
     BASIC("Basic");
 
     private final String type;
 
-    AuthenticationType(String type) {
+    AuthorizationType(String type) {
         this.type = type;
     }
 

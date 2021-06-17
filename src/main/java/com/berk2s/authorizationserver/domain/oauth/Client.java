@@ -1,5 +1,6 @@
-package com.berk2s.authorizationserver.domain;
+package com.berk2s.authorizationserver.domain.oauth;
 
+import com.berk2s.authorizationserver.domain.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -39,4 +40,12 @@ public class Client extends BaseEntity {
     )
     @Column(name = "redirect_uri")
     private Set<URI> redirectUris = new HashSet<>();
+
+    private boolean isAccountNonExpired;
+
+    private boolean isAccountNonLocked;
+
+    private boolean isCredentialsNonExpired;
+
+    private boolean isEnabled;
 }

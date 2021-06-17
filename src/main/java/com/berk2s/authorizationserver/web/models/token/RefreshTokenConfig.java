@@ -7,6 +7,6 @@ import java.time.Duration;
 
 @Getter
 @Setter
-public class RefreshToken extends Token {
+public class RefreshTokenConfig extends Token {
     private Duration maxLifeTime;
 }

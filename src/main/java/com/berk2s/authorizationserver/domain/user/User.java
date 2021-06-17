@@ -1,5 +1,6 @@
-package com.berk2s.authorizationserver.domain;
+package com.berk2s.authorizationserver.domain.user;
 
+import com.berk2s.authorizationserver.domain.BaseEntity;
 import lombok.*;
 
 import javax.persistence.Column;
