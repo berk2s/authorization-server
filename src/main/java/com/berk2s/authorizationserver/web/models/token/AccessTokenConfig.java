@@ -1,4 +1,4 @@
-package com.berk2s.authorizationserver.web.models;
+package com.berk2s.authorizationserver.web.models.token;
 
 import com.berk2s.authorizationserver.web.models.token.Token;
 import com.berk2s.authorizationserver.web.models.token.TokenType;

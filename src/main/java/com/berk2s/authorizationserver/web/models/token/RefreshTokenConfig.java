@@ -1,4 +1,4 @@
-package com.berk2s.authorizationserver.web.models;
+package com.berk2s.authorizationserver.web.models.token;
 
 import lombok.Getter;
 import lombok.Setter;
