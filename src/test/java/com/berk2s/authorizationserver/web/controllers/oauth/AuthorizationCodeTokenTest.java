@@ -10,6 +10,7 @@ import com.berk2s.authorizationserver.web.models.ErrorDesc;
 import com.berk2s.authorizationserver.web.models.ErrorType;
 import com.berk2s.authorizationserver.web.models.token.TokenType;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -144,6 +145,45 @@ public class AuthorizationCodeTokenTest extends IntegrationTest {
                 .andExpect(jsonPath("$.refresh_token", hasLength(48)))
                 .andExpect(jsonPath("$.access_token", matchesPattern("^[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$")))
                 .andExpect(jsonPath("$.id_token", matchesPattern("^[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$")))
+                .andExpect(jsonPath("$.token_type", is(TokenType.BEARER.name())))
+                .andExpect(jsonPath("$.expires_in").isNumber());
+
+    }
+
+    @DisplayName("Test Authorization Code Token Request With PKCE By Public Client Without openid")
+    @Test
+    void testAuthorizationCodeTokenRequestWithPKCEByPublicClientWithoutOpenid() throws Exception {
+
+        String codeVerifier = RandomStringUtils.random(64, true, true);
+        String codeChallenge = pkceService.hashCodeVerifier(codeVerifier);
+
+        AuthorizationCodeDto authorizationCodeDto = authorizationCodeService.createAuthorizationCode("clientId",
+                new URI("http://redirect-uri"),
+                Set.of(""),
+                getUser().getId().toString(),
+                "nonce",
+                codeChallenge,
+                ChallengeMethod.S256.name());
+
+        params.remove("code");
+        params.remove("client_id");
+        params.remove("client_secret");
+        params.set("scope", "");
+        params.add("client_id", "clientId");
+        params.set("client_secret", "");
+        params.add("code", authorizationCodeDto.getCode());
+        params.add("code_verifier", codeVerifier);
+
+        encodedAuthorization = AuthenticationParser.encodeBase64("clientId", "");
+
+        mockMvc.perform(post(TokenController.ENDPOINT)
+                .header("Authorization", encodedAuthorization)
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                .params(params))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.refresh_token", hasLength(48)))
+                .andExpect(jsonPath("$.access_token", matchesPattern("^[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$")))
+                .andExpect(jsonPath("$.id_token").value(IsNull.nullValue()))
                 .andExpect(jsonPath("$.token_type", is(TokenType.BEARER.name())))
                 .andExpect(jsonPath("$.expires_in").isNumber());
 

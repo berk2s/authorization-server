@@ -92,6 +92,8 @@ public class ClientCredentialsTokenServiceImpl implements ClientCredentialsToken
         AccessTokenDto accessToken = accessTokenService.createToken(accessTokenCmd);
         RefreshTokenDto refreshToken = refreshTokenService.createToken(refreshTokenCmd);
 
+        log.info("Token response is created [grantType: client_credentials, clientId: {}]", client.getClientId());
+
         return TokenResponseDto.builder()
                 .accessToken(accessToken.getToken())
                 .refreshToken(refreshToken.getToken())
