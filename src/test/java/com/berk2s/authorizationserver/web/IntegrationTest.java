@@ -4,8 +4,12 @@ package com.berk2s.authorizationserver.web;
 import com.berk2s.authorizationserver.AuthorizationServerApplication;
 import com.berk2s.authorizationserver.config.ServerConfiguration;
 import com.berk2s.authorizationserver.domain.oauth.Client;
+import com.berk2s.authorizationserver.domain.user.Authority;
+import com.berk2s.authorizationserver.domain.user.Role;
 import com.berk2s.authorizationserver.domain.user.User;
+import com.berk2s.authorizationserver.repository.AuthorityRepository;
 import com.berk2s.authorizationserver.repository.ClientRepository;
+import com.berk2s.authorizationserver.repository.RoleRepository;
 import com.berk2s.authorizationserver.repository.UserRepository;
 import lombok.Getter;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -36,11 +40,25 @@ public abstract class IntegrationTest {
     @Autowired
     ClientRepository clientRepository;
 
+    @Autowired
+    RoleRepository roleRepository;
+
+    @Autowired
+    AuthorityRepository authorityRepository;
+
     @Transactional
     public User getUser() {
+        Role role = new Role();
+        role.setRoleName(RandomStringUtils.random(6, true, false).toUpperCase(Locale.ROOT));
+
+        Authority authority = new Authority();
+        authority.setAuthorityName(RandomStringUtils.random(6, true, false).toUpperCase(Locale.ROOT));
+
         User user = new User();
         user.setUsername(RandomStringUtils.random(6, true, false).toUpperCase(Locale.ROOT));
         user.setPassword(passwordEncoder.encode("password"));
+        user.setFirstName("firstname");
+        user.setLastName("lastname");
         user.setEmail(RandomStringUtils.random(5));
         user.setPhoneNumber(RandomStringUtils.random(5));
         user.setAccountNonExpired(true);
@@ -48,8 +66,12 @@ public abstract class IntegrationTest {
         user.setCredentialsNonExpired(true);
         user.setAccountNonLocked(true);
 
-        userRepository.save(user);
+        role.addUser(user);
+        authority.addUsers(user);
 
+        userRepository.save(user);
+        roleRepository.save(role);
+        authorityRepository.save(authority);
         return user;
     }
 

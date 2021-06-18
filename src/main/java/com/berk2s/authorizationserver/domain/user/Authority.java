@@ -18,7 +18,11 @@ public class Authority extends BaseEntity {
     @Column(name = "authority_name", unique = true)
     private String authorityName;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {
+            CascadeType.MERGE,
+            CascadeType.REFRESH,
+            CascadeType.DETACH
+    })
     @JoinTable(name = "USER_AUTHORITIES",
             joinColumns = {
                 @JoinColumn(name = "authority_id", referencedColumnName = "id")
