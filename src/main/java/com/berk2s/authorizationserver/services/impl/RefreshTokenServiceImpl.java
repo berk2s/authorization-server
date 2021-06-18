@@ -53,6 +53,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService  {
         refreshToken.setNotBefore(issueTime);
         refreshToken.setExpiryDateTime(expiryDateTime);
         refreshToken.setSubject(tokenCommand.getUserDetails().getId());
+        refreshToken.setClientId(tokenCommand.getClientId());
 
         log.info("Refresh token is created for the given user [user: {}]", tokenCommand.getUserDetails().getId().toString());
 

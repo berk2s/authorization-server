@@ -52,6 +52,8 @@ public class JWTServiceImpl implements JWTService {
                     .expirationTime(Date.from(jwtCommand.getExpiryDateTime().atZone(ZoneId.systemDefault()).toInstant()))
                     .jwtID(idGenerator.generateId().toString());
 
+            jwtClaimsSetBuilder.claim("scope", String.join(" ", jwtCommand.getScopes()));
+            jwtClaimsSetBuilder.claim("username", String.join(" ", userDetails.getUsername()));
             for (Map.Entry<String, Object> claim: jwtCommand.getClaims().entrySet()) {
                 jwtClaimsSetBuilder.claim(claim.getKey(), claim.getValue());
             }

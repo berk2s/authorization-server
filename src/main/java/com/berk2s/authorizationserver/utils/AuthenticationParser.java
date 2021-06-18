@@ -34,7 +34,7 @@ public final class AuthenticationParser {
             int grater = token.indexOf(":");
 
             if (grater == -1) {
-                log.warn("Cannot parse basic authentication header [token: {}]", token);
+                log.warn("Cannot parse basic authentication header [token: {}]", header);
                 throw new BadCredentialsException(ErrorDesc.BAD_CREDENTIALS.getDesc());
             }
 

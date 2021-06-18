@@ -1,4 +1,4 @@
-package com.berk2s.authorizationserver.web.controllers.oauth;
+package com.berk2s.authorizationserver.web.controllers;
 
 import com.berk2s.authorizationserver.utils.AuthenticationParser;
 import com.berk2s.authorizationserver.web.IntegrationTest;
