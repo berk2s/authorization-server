@@ -15,7 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@RedisHash("refresh_token")
+@RedisHash("RefreshToken")
 public class RefreshToken {
 
     @Id

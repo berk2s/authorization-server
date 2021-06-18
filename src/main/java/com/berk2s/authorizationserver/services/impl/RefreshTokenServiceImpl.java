@@ -15,6 +15,7 @@ import com.berk2s.authorizationserver.web.models.token.TokenCommand;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.RandomUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -47,6 +48,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService  {
         String token = randomString();
 
         RefreshToken refreshToken = new RefreshToken();
+        refreshToken.setId(RandomUtils.nextLong());
         refreshToken.setToken(token);
         refreshToken.setUserType(userType(tokenCommand.getUserDetails()));
         refreshToken.setIssueTime(issueTime);
