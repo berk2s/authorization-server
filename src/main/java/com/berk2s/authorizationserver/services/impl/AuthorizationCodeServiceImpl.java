@@ -11,6 +11,7 @@ import com.berk2s.authorizationserver.web.models.AuthorizationCodeDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.RandomUtils;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
@@ -56,6 +57,7 @@ public class AuthorizationCodeServiceImpl implements AuthorizationCodeService {
         String code = RandomStringUtils.random(32, true, true);
 
         AuthorizationCodeDto authorizationCodeDto = AuthorizationCodeDto.builder()
+                .id(RandomUtils.nextLong())
                 .code(code)
                 .clientId(clientId)
                 .scopes(scopes)

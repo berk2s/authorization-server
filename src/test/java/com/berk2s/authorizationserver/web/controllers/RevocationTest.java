@@ -24,12 +24,10 @@ import org.springframework.util.LinkedMultiValueMap;
 import java.time.Duration;
 import java.util.Set;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.hamcrest.Matchers.*;
-public class IntrospectionTest extends IntegrationTest {
+
+public class RevocationTest extends IntegrationTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -72,12 +70,12 @@ public class IntrospectionTest extends IntegrationTest {
                         .build());
 
         accessTokenDto = accessTokenService.createToken(TokenCommand.builder()
-                        .userDetails(new SecurityUserDetails(user))
-                        .clientId("clientId")
-                        .scopes(Set.of("openid", "profile"))
-                        .nonce("nonce")
-                        .duration(accessTokenDuration)
-                        .build());
+                .userDetails(new SecurityUserDetails(user))
+                .clientId("clientId")
+                .scopes(Set.of("openid", "profile"))
+                .nonce("nonce")
+                .duration(accessTokenDuration)
+                .build());
 
         idTokenDto = idTokenService.createToken(TokenCommand.builder()
                 .userDetails(new SecurityUserDetails(user))
@@ -92,51 +90,15 @@ public class IntrospectionTest extends IntegrationTest {
         encodedAuthorization = AuthenticationParser.encodeBase64("clientWithSecret", "clientSecret");
     }
 
-    @DisplayName("Introspection Refresh Token Successfully")
-    @Test
-    void introspectionRefreshTokenSuccessfully() throws Exception {
-        mockMvc.perform(post(IntrospectionController.ENDPOINT)
-                .header("Authorization", encodedAuthorization)
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                .params(params))
-                .andExpect(status().is2xxSuccessful())
-                .andExpect(jsonPath("$.client_id", is("clientId")))
-                .andExpect(jsonPath("$.scope", is("refresh_token")))
-                .andExpect(jsonPath("$.username", is("clientId")))
-                .andExpect(jsonPath("$.active", is(true)))
-                .andExpect(jsonPath("$.exp").isNotEmpty());
-    }
 
-    @DisplayName("Introspection Access Token Successfully")
+    @DisplayName("Revoke Refresh Token Successfully")
     @Test
-    void introspectionAccessTokenSuccessfully() throws Exception {
-        params.set("token", accessTokenDto.getToken());
-        mockMvc.perform(post(IntrospectionController.ENDPOINT)
+    void revokeRefreshTokenSuccessfully() throws Exception {
+        mockMvc.perform(post(RevocationController.ENDPOINT)
                 .header("Authorization", encodedAuthorization)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .params(params))
-                .andExpect(status().is2xxSuccessful())
-                .andExpect(jsonPath("$.client_id", is("clientWithSecret")))
-                .andExpect(jsonPath("$.scope").isNotEmpty())
-                .andExpect(jsonPath("$.username", is(user.getUsername())))
-                .andExpect(jsonPath("$.active", is(true)))
-                .andExpect(jsonPath("$.exp").isNotEmpty());
-    }
-
-    @DisplayName("Introspection Id Token Successfully")
-    @Test
-    void introspectionIdTokenSuccessfully() throws Exception {
-        params.set("token", idTokenDto.getToken());
-        mockMvc.perform(post(IntrospectionController.ENDPOINT)
-                .header("Authorization", encodedAuthorization)
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-                .params(params))
-                .andExpect(status().is2xxSuccessful())
-                .andExpect(jsonPath("$.client_id", is("clientWithSecret")))
-                .andExpect(jsonPath("$.scope").isNotEmpty())
-                .andExpect(jsonPath("$.username", is(user.getUsername())))
-                .andExpect(jsonPath("$.active", is(true)))
-                .andExpect(jsonPath("$.exp").isNotEmpty());
+                .andExpect(status().is2xxSuccessful());
     }
 
 

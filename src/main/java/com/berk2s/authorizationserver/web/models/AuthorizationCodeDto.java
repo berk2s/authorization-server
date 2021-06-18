@@ -15,6 +15,8 @@ import java.util.Set;
 @AllArgsConstructor
 public class AuthorizationCodeDto {
 
+    private Long id;
+
     private String clientId;
 
     private URI redirectUri;
@@ -36,7 +38,8 @@ public class AuthorizationCodeDto {
     private String codeChallengeMethod;
 
     @Builder
-    public AuthorizationCodeDto(String clientId,
+    public AuthorizationCodeDto(Long id,
+                                String clientId,
                                 URI redirectUri,
                                 Set<String> scopes,
                                 String code,
@@ -44,6 +47,7 @@ public class AuthorizationCodeDto {
                                 String nonce,
                                 String codeChallenge,
                                 String codeChallengeMethod) {
+        this.id = id;
         this.clientId = clientId;
         this.redirectUri = redirectUri;
         this.scopes = scopes;
