@@ -19,7 +19,11 @@ public class Role extends BaseEntity {
     @Column(name = "role_name", unique = true)
     public String roleName;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {
+            CascadeType.MERGE,
+            CascadeType.REFRESH,
+            CascadeType.DETACH
+    })
     @JoinTable(name = "user_roles",
             joinColumns = {
                 @JoinColumn(name = "group_id", referencedColumnName = "id")
