@@ -3,6 +3,7 @@ package com.berk2s.authorizationserver.utils;
 import com.berk2s.authorizationserver.web.exceptions.InvalidClientException;
 import com.berk2s.authorizationserver.web.models.ClientCredentialsDto;
 import com.berk2s.authorizationserver.web.models.ErrorDesc;
+import com.berk2s.authorizationserver.web.models.TokenRequest;
 import com.berk2s.authorizationserver.web.models.token.TokenRequestDto;
 import com.berk2s.authorizationserver.web.models.token.TokenType;
 import lombok.extern.slf4j.Slf4j;
@@ -57,7 +58,7 @@ public final class AuthenticationParser {
         }
     }
 
-    public static ClientCredentialsDto parseAndValidate(String header, TokenRequestDto tokenRequest) {
+    public static ClientCredentialsDto parseAndValidate(String header, TokenRequest tokenRequest) {
         if (StringUtils.isNotBlank(header)) {
             ClientCredentialsDto clientCredentials = basicParser(header);
 

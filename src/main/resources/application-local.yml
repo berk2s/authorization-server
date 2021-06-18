@@ -1,3 +1,6 @@
+server:
+  port: 8080
+
 spring:
   redis:
     host: 192.168.1.37
@@ -22,7 +25,7 @@ authorization-server:
   login-url: /signin
   private-key-path: private.key
   public-key-path: public.json
-  issuer: http://localhost:${server.port}/
+  issuer: http://localhost:${server.port}
   access-token:
     default-format: jwt
     lifetime: 1m
@@ -30,4 +33,4 @@ authorization-server:
     lifetime: 1m
   refresh-token:
     lifetime: 8h
-    max-lifetime: 8
+    max-lifetime: 8h

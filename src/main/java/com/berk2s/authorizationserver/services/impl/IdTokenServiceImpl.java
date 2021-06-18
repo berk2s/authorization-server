@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -33,14 +34,21 @@ public class IdTokenServiceImpl implements IdTokenService {
                 + " "
                 + securityUserDetails.getLastName());
         claims.put("given_name", securityUserDetails.getName());
+        claims.put("scopes",  "openid profile offline_access");
+        claims.put("profile",  securityUserDetails.getLastName());
         claims.put("last_name",  securityUserDetails.getLastName());
+
+        Set<String> scopes = new HashSet<>(tokenCommand.getScopes());
+        scopes.add("openid");
+        scopes.add("profile");
+        scopes.add("offline_access");
 
         JWTCommand jwtCommand = JWTCommand.builder()
                 .userDetails(tokenCommand.getUserDetails())
                 .nonce(tokenCommand.getNonce())
                 .clientId(tokenCommand.getClientId())
-                .scopes(tokenCommand.getScopes())
-                .audiences(Set.of("all"))
+                .scopes(scopes)
+                .audiences(Set.of(tokenCommand.getClientId()))
                 .expiryDateTime(expiryDateTime)
                 .claims(claims)
                 .build();

@@ -3,7 +3,9 @@ package com.berk2s.authorizationserver.bootstrap;
 import com.berk2s.authorizationserver.config.ServerConfiguration;
 import com.berk2s.authorizationserver.domain.oauth.Client;
 import com.berk2s.authorizationserver.domain.oauth.GrantType;
+import com.berk2s.authorizationserver.domain.user.User;
 import com.berk2s.authorizationserver.repository.ClientRepository;
+import com.berk2s.authorizationserver.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
@@ -21,6 +23,7 @@ public class DataLoader implements CommandLineRunner {
 
     private final ClientRepository clientRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -28,11 +31,25 @@ public class DataLoader implements CommandLineRunner {
     }
 
     private void loadClients() throws URISyntaxException {
+        User user = new User();
+        user.setUsername("username");
+        user.setPassword(passwordEncoder.encode("password"));
+        user.setLastName("lastname");
+        user.setFirstName("firstname");
+        user.setPhoneNumber("phone");
+        user.setEmail("email");
+        user.setAccountNonLocked(true);
+        user.setEnabled(true);
+        user.setAccountNonExpired(true);
+        user.setCredentialsNonExpired(true);
+
+        userRepository.save(user);
+
         Client client = new Client();
         client.setClientId("clientId");
         client.setClientSecret(passwordEncoder.encode(""));
         client.setConfidential(false);
-        client.setRedirectUris(Set.of(new URI("http://redirect-uri")));
+        client.setRedirectUris(Set.of(new URI("http://localhost:4200"), new URI("http://redirect-uri")));
         client.setGrantTypes(Set.of(GrantType.AUTHORIZATION_CODE,
                 GrantType.PASSWORD,
                 GrantType.REFRESH_TOKEN,

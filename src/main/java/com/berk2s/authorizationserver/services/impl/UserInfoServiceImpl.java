@@ -1,5 +1,7 @@
 package com.berk2s.authorizationserver.services.impl;
 
+import com.berk2s.authorizationserver.domain.user.Authority;
+import com.berk2s.authorizationserver.domain.user.Role;
 import com.berk2s.authorizationserver.domain.user.User;
 import com.berk2s.authorizationserver.repository.UserRepository;
 import com.berk2s.authorizationserver.services.JWTService;
@@ -38,13 +40,15 @@ public class UserInfoServiceImpl implements UserInfoService {
                     throw new InvalidGrantException(ErrorDesc.INVALID_TOKEN_SUBJECT.getDesc());
                 });
 
+        log.info("User info is created [userId: {}]", userId);
+
         return UserInfoDto.builder()
                 .sub(user.getId().toString())
                 .name(user.getFirstName() + " " + user.getLastName())
                 .nickname(user.getUsername())
                 .profile(user.getUsername())
-                .roles(user.getRoles().stream().map(r -> r.getRoleName()).collect(Collectors.toSet()))
-                .authorities(user.getAuthorities().stream().map(a -> a.getAuthorityName()).collect(Collectors.toSet()))
+                .roles(user.getRoles().stream().map(Role::getRoleName).collect(Collectors.toSet()))
+                .authorities(user.getAuthorities().stream().map(Authority::getAuthorityName).collect(Collectors.toSet()))
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .preferredUsername(user.getUsername())

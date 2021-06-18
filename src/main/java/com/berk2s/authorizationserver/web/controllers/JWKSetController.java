@@ -2,12 +2,14 @@ package com.berk2s.authorizationserver.web.controllers;
 
 import com.berk2s.authorizationserver.config.JwtPkiConfiguration;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
+@CrossOrigin(originPatterns = "*", allowCredentials = "true", allowedHeaders = "*")
 @RequiredArgsConstructor
 @RequestMapping(JWKSetController.ENDPOINT)
 @RestController

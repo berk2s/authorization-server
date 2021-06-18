@@ -45,7 +45,6 @@ public class JwtPkiConfiguration {
     @PostConstruct
     public void init() throws JOSEException, IOException, InvalidKeySpecException, NoSuchAlgorithmException {
 
-        if (!RSAKeyUtil.isKeyExists(this.publicKeyPath) || !RSAKeyUtil.isKeyExists(this.privateKeyPath)) {
             RSAKey rsaKey = new RSAKeyGenerator(2048).keyID("1").generate();
 
             this.publicKey = rsaKey.toPublicJWK();
@@ -53,16 +52,6 @@ public class JwtPkiConfiguration {
             this.jwkSet = new JWKSet(this.publicKey);
             this.jwsVerifier = new RSASSAVerifier(this.publicKey);
 
-            RSAKeyUtil.writeRSAKey(this.publicKeyPath, rsaKey);
-            RSAKeyUtil.writePrivateKey(this.privateKeyPath, rsaKey.toRSAPrivateKey());
-        } else {
-            RSAKey rsaKey = RSAKeyUtil.readRSAKey(this.publicKeyPath, this.privateKeyPath);
-
-            this.publicKey = rsaKey.toPublicJWK();
-            this.jwsSigner = new RSASSASigner(rsaKey);
-            this.jwkSet = new JWKSet(this.publicKey);
-            this.jwsVerifier = new RSASSAVerifier(this.publicKey);
-        }
 
     }
 

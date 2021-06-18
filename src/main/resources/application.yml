@@ -1,3 +1,6 @@
+server:
+  port: 8080
+
 spring:
   profiles:
     active: local
@@ -32,4 +35,4 @@ authorization-server:
     lifetime: 1m
   refresh-token:
     lifetime: 8h
-    max-lifetime: 8
+    max-lifetime: 8h

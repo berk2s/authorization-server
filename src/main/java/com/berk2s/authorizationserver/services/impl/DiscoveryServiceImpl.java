@@ -2,7 +2,7 @@ package com.berk2s.authorizationserver.services.impl;
 
 import com.berk2s.authorizationserver.config.JwtPkiConfiguration;
 import com.berk2s.authorizationserver.services.DiscoveryService;
-import com.berk2s.authorizationserver.web.controllers.JWKSetController;
+import com.berk2s.authorizationserver.web.controllers.*;
 import com.berk2s.authorizationserver.web.models.DiscoveryDto;
 import com.berk2s.authorizationserver.web.models.Scope;
 import lombok.RequiredArgsConstructor;
@@ -24,11 +24,11 @@ public class DiscoveryServiceImpl implements DiscoveryService {
 
         discoveryDto.setIssuer(issuer);
 
-        discoveryDto.setAuthorizationEndpoint(issuer); // TODO: AuthorizationController
-        discoveryDto.setTokenEndpoint(issuer); // TODO: TokenController
-        discoveryDto.setIntrospectionEndpoint(issuer); // TODO: IntrospectionController
-        discoveryDto.setUserinfoEndpoint(issuer); // TODO: UserInfoController
-        discoveryDto.setRevocationEndpoint(issuer); // TODO
+        discoveryDto.setAuthorizationEndpoint(issuer + AuthorizationController.ENDPOINT); // TODO: AuthorizationController
+        discoveryDto.setTokenEndpoint(issuer + TokenController.ENDPOINT); // TODO: TokenController
+        discoveryDto.setIntrospectionEndpoint(issuer + IntrospectionController.ENDPOINT); // TODO: IntrospectionController
+        discoveryDto.setUserinfoEndpoint(issuer + UserInfoController.ENDPOINT); // TODO: UserInfoController
+        discoveryDto.setRevocationEndpoint(issuer + RevocationController.ENDPOINT); // TODO
         discoveryDto.setRegistrationEndpoint(issuer); // TODO
 
         discoveryDto.setJwksUri(issuer + JWKSetController.ENDPOINT);

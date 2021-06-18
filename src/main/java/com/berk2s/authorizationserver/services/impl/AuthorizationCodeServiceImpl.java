@@ -70,6 +70,8 @@ public class AuthorizationCodeServiceImpl implements AuthorizationCodeService {
 
         authorizationCodeRepository.save(authorizationCodeMapper.authorizationCodeDtoToAuthorizationCode(authorizationCodeDto));
 
+        log.info("Authorization code is created [code: {}, clientId: {}]", code, clientId);
+
         return authorizationCodeDto;
     }
 

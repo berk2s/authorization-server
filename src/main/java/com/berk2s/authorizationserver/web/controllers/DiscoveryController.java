@@ -1,14 +1,16 @@
-package com.berk2s.authorizationserver.web;
+package com.berk2s.authorizationserver.web.controllers;
 
 import com.berk2s.authorizationserver.services.DiscoveryService;
 import com.berk2s.authorizationserver.web.models.DiscoveryDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@CrossOrigin(originPatterns = "*", allowCredentials = "true", allowedHeaders = "*")
 @RequiredArgsConstructor
 @RequestMapping(DiscoveryController.ENDPOINT)
 @RestController

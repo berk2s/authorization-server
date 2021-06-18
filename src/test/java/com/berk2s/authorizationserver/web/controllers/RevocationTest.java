@@ -86,7 +86,8 @@ public class RevocationTest extends IntegrationTest {
                 .build());
 
         params.add("token", refreshToken.getToken());
-
+        params.add("client_id", "clientWithSecret");
+        params.add("client_secret", "clientSecret");
         encodedAuthorization = AuthenticationParser.encodeBase64("clientWithSecret", "clientSecret");
     }
 
