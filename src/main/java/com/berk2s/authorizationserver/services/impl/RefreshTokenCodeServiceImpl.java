@@ -1,28 +1,30 @@
 package com.berk2s.authorizationserver.services.impl;
 
 import com.berk2s.authorizationserver.config.ServerConfiguration;
-import com.berk2s.authorizationserver.domain.oauth.AuthorizationCode;
+import com.berk2s.authorizationserver.domain.UserType;
 import com.berk2s.authorizationserver.domain.oauth.Client;
 import com.berk2s.authorizationserver.domain.oauth.GrantType;
-import com.berk2s.authorizationserver.domain.user.User;
+import com.berk2s.authorizationserver.domain.token.RefreshToken;
 import com.berk2s.authorizationserver.repository.ClientRepository;
+import com.berk2s.authorizationserver.repository.RefreshTokenRepository;
 import com.berk2s.authorizationserver.repository.UserRepository;
 import com.berk2s.authorizationserver.security.ClientAuthenticationProvider;
+import com.berk2s.authorizationserver.security.SecurityClientDetails;
+import com.berk2s.authorizationserver.security.SecurityDetails;
 import com.berk2s.authorizationserver.security.SecurityUserDetails;
-import com.berk2s.authorizationserver.security.UserAuthenticationProvider;
 import com.berk2s.authorizationserver.services.AccessTokenService;
 import com.berk2s.authorizationserver.services.IdTokenService;
-import com.berk2s.authorizationserver.services.PasswordTokenService;
+import com.berk2s.authorizationserver.services.RefreshTokenCodeService;
 import com.berk2s.authorizationserver.services.RefreshTokenService;
 import com.berk2s.authorizationserver.utils.AuthenticationParser;
 import com.berk2s.authorizationserver.web.exceptions.InvalidClientException;
 import com.berk2s.authorizationserver.web.exceptions.InvalidGrantException;
+import com.berk2s.authorizationserver.web.exceptions.TokenNotFoundException;
 import com.berk2s.authorizationserver.web.models.ClientCredentialsDto;
 import com.berk2s.authorizationserver.web.models.ErrorDesc;
 import com.berk2s.authorizationserver.web.models.token.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
@@ -35,16 +37,16 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class PasswordTokenServiceImpl implements PasswordTokenService {
+public class RefreshTokenCodeServiceImpl implements RefreshTokenCodeService {
 
+    private final RefreshTokenRepository refreshTokenRepository;
     private final ClientRepository clientRepository;
     private final ClientAuthenticationProvider clientAuthenticationProvider;
-    private final UserAuthenticationProvider userAuthenticationProvider;
-    private final UserRepository userRepository;
-    private final ServerConfiguration serverConfiguration;
     private final RefreshTokenService refreshTokenService;
     private final AccessTokenService accessTokenService;
     private final IdTokenService idTokenService;
+    private final ServerConfiguration serverConfiguration;
+    private final UserRepository userRepository;
 
     @Override
     public TokenResponseDto getToken(String authorizationHeader, TokenRequestDto tokenRequest) {
@@ -59,80 +61,89 @@ public class PasswordTokenServiceImpl implements PasswordTokenService {
                     throw new InvalidClientException(ErrorDesc.INVALID_CLIENT.getDesc());
                 });
 
-        clientAuthenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(clientId, clientSecret));
-
-        if(!client.isConfidential()) {
-            log.warn("Public Client tried to request with password [clientId: {}]", clientId);
-            throw new InvalidClientException(ErrorDesc.INSUFFICIENT_CLIENT_GRANT_CLIENT_CREDENTIALS.getDesc());
+        if(client.isConfidential()) {
+            clientAuthenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(clientId, clientSecret));
         }
 
-        if(!client.getGrantTypes().contains(GrantType.PASSWORD)) {
-            log.warn("Client tried to request password but it is not permitted to password [clientId: {}]", clientId);
-            throw new InvalidGrantException(ErrorDesc.INSUFFICIENT_CLIENT_GRANT_CLIENT_CREDENTIALS.getDesc());
+        if(!client.getGrantTypes().contains(GrantType.REFRESH_TOKEN)) {
+            log.warn("Client tried to request refresh_token but it is not permitted to refresh_token [clientId: {}]", clientId);
+            throw new InvalidGrantException(ErrorDesc.INSUFFICIENT_CLIENT_GRANT_REFRESH_TOKEN.getDesc());
         }
 
-        String username = tokenRequest.getUsername();
-        String password = tokenRequest.getPassword();
-
-        User user = userRepository
-                .findByUsername(username)
+        RefreshToken refreshToken = refreshTokenRepository.findByToken(tokenRequest.getRefreshToken())
                 .orElseThrow(() -> {
-                    log.warn("Cannot find user by given username [username: {}]", username);
-                    throw new BadCredentialsException(ErrorDesc.BAD_CREDENTIALS.getDesc());
+                   log.warn("Cannot find refresh token by given token [token: {}]", tokenRequest.getRefreshToken());
+                    throw new TokenNotFoundException(ErrorDesc.INVALID_TOKEN.getDesc());
                 });
 
-        userAuthenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 
         Duration accessTokenDuration = serverConfiguration.getAccessToken().getLifetime();
         Duration refreshTokenDuration = serverConfiguration.getRefreshToken().getLifetime();
         Duration idTokenDuration = serverConfiguration.getIdToken().getLifetime();
 
-        SecurityUserDetails securityUserDetails = new SecurityUserDetails(user);
+        SecurityDetails securityDetails = getSecurityDetails(refreshToken, client);
 
         Set<String> scopes = new HashSet<>(Arrays.asList(tokenRequest.getScope().split(" ")));
 
         TokenCommand refreshTokenCmd = TokenCommand.builder()
-                .userDetails(securityUserDetails)
+                .userDetails(securityDetails)
                 .clientId(client.getClientId())
                 .scopes(scopes)
                 .duration(refreshTokenDuration)
                 .build();
 
         TokenCommand accessTokenCmd = TokenCommand.builder()
-                .userDetails(securityUserDetails)
+                .userDetails(securityDetails)
                 .clientId(client.getClientId())
                 .scopes(scopes)
                 .nonce(null)
                 .duration(accessTokenDuration)
                 .build();
 
-        TokenCommand idTokenCmd = TokenCommand.builder()
-                .userDetails(securityUserDetails)
-                .clientId(client.getClientId())
-                .scopes(scopes)
-                .nonce(null)
-                .duration(idTokenDuration)
-                .build();
+        TokenCommand idTokenCmd = null;
 
-        RefreshTokenDto refreshToken = refreshTokenService.createToken(refreshTokenCmd);
+        RefreshTokenDto refreshTokenDto = refreshTokenService.createToken(refreshTokenCmd);
 
-        AccessTokenDto accessToken = accessTokenService.createToken(accessTokenCmd);
+        AccessTokenDto accessTokenDto = accessTokenService.createToken(accessTokenCmd);
 
-        IdTokenDto idToken = null;
+        IdTokenDto idTokenDto = null;
 
-        if(scopes.stream().map(String::toUpperCase).anyMatch(s -> s.contains(ScopeConfig.OPENID.name()))) {
-            idToken = idTokenService.createToken(idTokenCmd);
+        if (refreshToken.getUserType().equals(UserType.END_USER)) {
+            idTokenCmd = TokenCommand.builder()
+                    .userDetails(securityDetails)
+                    .clientId(client.getClientId())
+                    .scopes(scopes)
+                    .nonce(null)
+                    .duration(idTokenDuration)
+                    .build();
+
+            if(scopes.stream().map(String::toUpperCase).anyMatch(s -> s.contains(ScopeConfig.OPENID.name()))) {
+                idTokenDto = idTokenService.createToken(idTokenCmd);
+            }
         }
 
-        log.info("Token response is created [grantType: password, clientId: {}, userId: {}]", client.getClientId(), user.getId().toString());
+
+        log.info("Token response is created [grantType: password, clientId: {}, userId: {}]", client.getClientId(), securityDetails.getId().toString());
 
         return TokenResponseDto.builder()
-                .accessToken(accessToken.getToken())
-                .refreshToken(refreshToken.getToken())
-                .idToken(idToken != null ? idToken.getToken() : null)
+                .accessToken(accessTokenDto.getToken())
+                .refreshToken(refreshTokenDto.getToken())
+                .idToken(idTokenDto != null ? idTokenDto.getToken() : null)
                 .tokenType(TokenType.BEARER.name())
                 .expiresIn(accessTokenDuration.toSeconds())
                 .build();
     }
 
+    private SecurityDetails getSecurityDetails(RefreshToken refreshToken, Client client) {
+        UUID subject = refreshToken.getSubject();
+        if(refreshToken.getUserType().equals(UserType.END_USER)) {
+            return new SecurityUserDetails(userRepository.findById(subject)
+                    .orElseThrow(() -> {
+                        log.warn("Cannot find user by given id [userId: {}]", subject);
+                        throw new InvalidGrantException(ErrorDesc.INVALID_CODE_SUBJECT.getDesc());
+                    }));
+        }
+
+        return new SecurityClientDetails(client);
+    }
 }

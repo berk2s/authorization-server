@@ -1,7 +1,11 @@
 package com.berk2s.authorizationserver.services.impl;
 
+import com.berk2s.authorizationserver.domain.UserType;
 import com.berk2s.authorizationserver.domain.token.RefreshToken;
 import com.berk2s.authorizationserver.repository.RefreshTokenRepository;
+import com.berk2s.authorizationserver.security.SecurityClientDetails;
+import com.berk2s.authorizationserver.security.SecurityDetails;
+import com.berk2s.authorizationserver.security.SecurityUserDetails;
 import com.berk2s.authorizationserver.services.RefreshTokenService;
 import com.berk2s.authorizationserver.web.exceptions.TokenNotFoundException;
 import com.berk2s.authorizationserver.web.mappers.TokenMapper;
@@ -44,6 +48,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService  {
 
         RefreshToken refreshToken = new RefreshToken();
         refreshToken.setToken(token);
+        refreshToken.setUserType(userType(tokenCommand.getUserDetails()));
         refreshToken.setIssueTime(issueTime);
         refreshToken.setNotBefore(issueTime);
         refreshToken.setExpiryDateTime(expiryDateTime);
@@ -62,5 +67,15 @@ public class RefreshTokenServiceImpl implements RefreshTokenService  {
 
     private String randomString() {
         return RandomStringUtils.random(48, true, true);
+    }
+
+    private UserType userType(SecurityDetails securityDetails) {
+        if(securityDetails instanceof SecurityUserDetails) {
+            return UserType.END_USER;
+        } else if (securityDetails instanceof SecurityClientDetails) {
+            return UserType.CLIENT;
+        }
+
+        return UserType.CLIENT;
     }
 }

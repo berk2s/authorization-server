@@ -24,10 +24,9 @@ import java.net.URISyntaxException;
 import java.util.Set;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import static org.hamcrest.Matchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class AuthorizationCodeTokenTest extends IntegrationTest {
 
@@ -74,6 +73,7 @@ public class AuthorizationCodeTokenTest extends IntegrationTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .params(params))
                 .andExpect(status().is2xxSuccessful())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.refresh_token", hasLength(48)))
                 .andExpect(jsonPath("$.access_token", matchesPattern("^[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$")))
                 .andExpect(jsonPath("$.id_token", matchesPattern("^[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$")))
@@ -107,6 +107,7 @@ public class AuthorizationCodeTokenTest extends IntegrationTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .params(params))
                 .andExpect(status().is4xxClientError())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.error", is(ErrorType.INVALID_REQUEST.getError())))
                 .andExpect(jsonPath("$.error_description", is(ErrorDesc.INVALID_CLIENT_TYPE.getDesc())));
     }
@@ -142,6 +143,7 @@ public class AuthorizationCodeTokenTest extends IntegrationTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .params(params))
                 .andExpect(status().is2xxSuccessful())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.refresh_token", hasLength(48)))
                 .andExpect(jsonPath("$.access_token", matchesPattern("^[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$")))
                 .andExpect(jsonPath("$.id_token", matchesPattern("^[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$")))
@@ -181,6 +183,7 @@ public class AuthorizationCodeTokenTest extends IntegrationTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .params(params))
                 .andExpect(status().is2xxSuccessful())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.refresh_token", hasLength(48)))
                 .andExpect(jsonPath("$.access_token", matchesPattern("^[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$")))
                 .andExpect(jsonPath("$.id_token").value(IsNull.nullValue()))
