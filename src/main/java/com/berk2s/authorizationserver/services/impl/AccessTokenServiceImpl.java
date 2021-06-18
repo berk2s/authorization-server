@@ -43,7 +43,7 @@ public class AccessTokenServiceImpl implements AccessTokenService {
                 .nonce(tokenCommand.getNonce())
                 .clientId(tokenCommand.getClientId())
                 .scopes(tokenCommand.getScopes())
-                .audiences(Set.of("all"))
+                .audiences(Set.of(tokenCommand.getClientId()))
                 .expiryDateTime(expiryDateTime)
                 .claims(claims)
                 .build();

@@ -1,7 +1,6 @@
 package com.berk2s.authorizationserver.web.controllers;
 
 import com.berk2s.authorizationserver.services.DiscoveryService;
-import com.berk2s.authorizationserver.web.DiscoveryController;
 import com.berk2s.authorizationserver.web.IntegrationTest;
 import com.berk2s.authorizationserver.web.models.DiscoveryDto;
 import org.junit.jupiter.api.BeforeEach;

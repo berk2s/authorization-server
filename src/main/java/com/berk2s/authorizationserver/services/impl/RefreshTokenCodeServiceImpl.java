@@ -83,7 +83,11 @@ public class RefreshTokenCodeServiceImpl implements RefreshTokenCodeService {
 
         SecurityDetails securityDetails = getSecurityDetails(refreshToken, client);
 
-        Set<String> scopes = new HashSet<>(Arrays.asList(tokenRequest.getScope().split(" ")));
+        Set<String> scopes = new HashSet<>();
+
+        if(tokenRequest.getScope() != null) {
+            scopes = new HashSet<>(Arrays.asList(tokenRequest.getScope().split(" ")));
+        }
 
         TokenCommand refreshTokenCmd = TokenCommand.builder()
                 .userDetails(securityDetails)
@@ -109,6 +113,8 @@ public class RefreshTokenCodeServiceImpl implements RefreshTokenCodeService {
         IdTokenDto idTokenDto = null;
 
         if (refreshToken.getUserType().equals(UserType.END_USER)) {
+            scopes.add("openid");
+
             idTokenCmd = TokenCommand.builder()
                     .userDetails(securityDetails)
                     .clientId(client.getClientId())
@@ -123,7 +129,7 @@ public class RefreshTokenCodeServiceImpl implements RefreshTokenCodeService {
         }
 
 
-        log.info("Token response is created [grantType: password, clientId: {}, userId: {}]", client.getClientId(), securityDetails.getId().toString());
+        log.info("Token response is created [grantType: refresh_token, clientId: {}, userId: {}]", client.getClientId(), securityDetails.getId().toString());
 
         return TokenResponseDto.builder()
                 .accessToken(accessTokenDto.getToken())

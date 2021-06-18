@@ -1,5 +1,6 @@
 package com.berk2s.authorizationserver.web.models.token;
 
+import com.berk2s.authorizationserver.web.models.TokenRequest;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +13,7 @@ import java.net.URI;
 @Data
 @NoArgsConstructor
 @Builder
-public class TokenRequestDto {
+public class TokenRequestDto implements TokenRequest {
 
     @NotBlank
     @JsonProperty("grant_type")

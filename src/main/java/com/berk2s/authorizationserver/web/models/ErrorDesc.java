@@ -12,6 +12,7 @@ public enum ErrorDesc {
     MISSING_CLIENT_CREDENTIALS("Missing client credentials"),
     INVALID_CLIENT_CREDENTIALS("Invalid client credentials"),
     EXPIRED_OR_INVALID_TOKEN("The token has expired or is not yet valid"),
+    INVALID_GRANT_TYPE("Invalid grant type"),
     /**
      * AuthorizationCodeService Exception Descriptions
      */

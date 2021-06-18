@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+@CrossOrigin(originPatterns = "*", allowCredentials = "true", allowedHeaders = "*")
 @RequiredArgsConstructor
 @RequestMapping(IntrospectionController.ENDPOINT)
 @RestController

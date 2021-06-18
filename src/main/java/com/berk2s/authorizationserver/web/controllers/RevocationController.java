@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+@CrossOrigin(originPatterns = "*", allowCredentials = "true", allowedHeaders = "*")
 @RequiredArgsConstructor
 @RequestMapping(RevocationController.ENDPOINT)
 @RestController
@@ -23,7 +24,7 @@ public class RevocationController {
 
     @PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public void revokeToken(@RequestHeader(name = "Authorization", required = true) String authorizationHeader,
+    public void revokeToken(@RequestHeader(name = "Authorization", required = false) String authorizationHeader,
                             @RequestParam Map<String, String> requestParam) {
         revocationService.revokeToken(authorizationHeader,
                 objectMapper.convertValue(requestParam, RevocationRequestDto.class));

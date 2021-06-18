@@ -1,5 +1,7 @@
 package com.berk2s.authorizationserver.services;
 
+import com.berk2s.authorizationserver.domain.oauth.Client;
+import com.berk2s.authorizationserver.repository.ClientRepository;
 import com.berk2s.authorizationserver.repository.RefreshTokenRepository;
 import com.berk2s.authorizationserver.security.ClientAuthenticationProvider;
 import com.berk2s.authorizationserver.services.impl.RevocationServiceImpl;
@@ -17,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,6 +36,9 @@ class RevocationServiceTest {
     RefreshTokenRepository refreshTokenRepository;
 
     @Mock
+    ClientRepository clientRepository;
+
+    @Mock
     ClientAuthenticationProvider clientAuthenticationProvider;
 
     @InjectMocks
@@ -41,10 +47,21 @@ class RevocationServiceTest {
     RevocationRequestDto revocationRequest;
     String encodedAuthorization;
 
+    Client client;
+
     @BeforeEach
     void setUp() {
+
+        client = Client.builder()
+                .clientId("clientId")
+                .clientSecret("clientSecret")
+                .confidential(true)
+                .build();
+
         revocationRequest = RevocationRequestDto.builder()
                 .token(RandomStringUtils.random(48, true, true))
+                .clientId("clientId")
+                .clientSecret("clientSecret")
                 .build();
 
         encodedAuthorization = AuthenticationParser.encodeBase64("clientId", "clientSecret");
@@ -61,12 +78,14 @@ class RevocationServiceTest {
                     authentication.getCredentials(),
                     Set.of());
         });
+        when(clientRepository.findByClientId(any())).thenReturn(Optional.of(client));
 
         revocationService.revokeToken(encodedAuthorization, revocationRequest);
 
         verify(refreshTokenService, times(1)).getToken(any());
         verify(clientAuthenticationProvider, times(1)).authenticate(any());
         verify(refreshTokenRepository, times(1)).deleteById(any());
+        verify(clientRepository, times(1)).findByClientId(any());
     }
 
 }

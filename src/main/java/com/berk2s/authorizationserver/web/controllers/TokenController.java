@@ -5,6 +5,8 @@ import com.berk2s.authorizationserver.services.AuthorizationCodeTokenService;
 import com.berk2s.authorizationserver.services.ClientCredentialsTokenService;
 import com.berk2s.authorizationserver.services.PasswordCodeTokenService;
 import com.berk2s.authorizationserver.services.RefreshTokenCodeService;
+import com.berk2s.authorizationserver.web.exceptions.InvalidRequestException;
+import com.berk2s.authorizationserver.web.models.ErrorDesc;
 import com.berk2s.authorizationserver.web.models.token.TokenRequestDto;
 import com.berk2s.authorizationserver.web.models.token.TokenResponseDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+@CrossOrigin(originPatterns = "*", allowCredentials = "true", allowedHeaders = "*")
 @RequiredArgsConstructor
 @RequestMapping(TokenController.ENDPOINT)
 @RestController
@@ -44,7 +47,7 @@ public class TokenController {
         } else if(tokenRequest.getGrantType().equalsIgnoreCase(GrantType.REFRESH_TOKEN.getGrant())) {
             return new ResponseEntity<>(refreshTokenCodeService.getToken(authorizationHeader, tokenRequest), HttpStatus.OK);
         } else {
-            throw new RuntimeException("Unknown grant type");
+            throw new InvalidRequestException(ErrorDesc.INVALID_GRANT_TYPE.getDesc());
         }
     }
 
