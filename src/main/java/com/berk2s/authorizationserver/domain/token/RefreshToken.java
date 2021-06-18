@@ -27,6 +27,8 @@ public class RefreshToken {
     @Indexed
     private UUID subject;
 
+    private String clientId;
+
     private UserType userType;
 
     private LocalDateTime issueTime;

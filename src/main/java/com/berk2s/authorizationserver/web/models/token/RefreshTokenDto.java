@@ -21,6 +21,8 @@ public class RefreshTokenDto {
 
     private String subject;
 
+    private String clientId;
+
     private UserType userType;
 
     private LocalDateTime issueTime;

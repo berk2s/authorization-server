@@ -20,5 +20,7 @@ public abstract class SecurityDetails {
         return null;
     }
 
+    public String getUsername() { return null; }
+
 }
 
