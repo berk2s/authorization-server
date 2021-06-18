@@ -1,5 +1,6 @@
 package com.berk2s.authorizationserver.domain.token;
 
+import com.berk2s.authorizationserver.domain.UserType;
 import lombok.*;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.index.Indexed;
@@ -25,6 +26,8 @@ public class RefreshToken {
 
     @Indexed
     private UUID subject;
+
+    private UserType userType;
 
     private LocalDateTime issueTime;
 

@@ -16,8 +16,7 @@ import org.springframework.util.LinkedMultiValueMap;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class PasswordTokenTest extends IntegrationTest {
 
@@ -49,6 +48,7 @@ public class PasswordTokenTest extends IntegrationTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .params(params))
                 .andExpect(status().is2xxSuccessful())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.refresh_token", hasLength(48)))
                 .andExpect(jsonPath("$.access_token", matchesPattern("^[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$")))
                 .andExpect(jsonPath("$.id_token", matchesPattern("^[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$")))
@@ -66,6 +66,7 @@ public class PasswordTokenTest extends IntegrationTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .params(params))
                 .andExpect(status().is2xxSuccessful())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.refresh_token", hasLength(48)))
                 .andExpect(jsonPath("$.access_token", matchesPattern("^[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$")))
                 .andExpect(jsonPath("$.id_token").value(IsNull.nullValue()))
@@ -85,6 +86,7 @@ public class PasswordTokenTest extends IntegrationTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .params(params))
                 .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.error", is(ErrorType.INVALID_CLIENT.getError())))
                 .andExpect(jsonPath("$.error_description", is(ErrorDesc.INVALID_CLIENT.getDesc())));
     }
@@ -99,6 +101,7 @@ public class PasswordTokenTest extends IntegrationTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .params(params))
                 .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.error", is(ErrorType.INVALID_CLIENT.getError())))
                 .andExpect(jsonPath("$.error_description", is(ErrorDesc.INVALID_CLIENT.getDesc())));
     }
@@ -114,8 +117,9 @@ public class PasswordTokenTest extends IntegrationTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .params(params))
                 .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.error", is(ErrorType.INVALID_CLIENT.getError())))
-                .andExpect(jsonPath("$.error_description", is(ErrorDesc.INSUFFICIENT_CLIENT_GRANT_CLIENT_CREDENTIALS.getDesc())));
+                .andExpect(jsonPath("$.error_description", is(ErrorDesc.INSUFFICIENT_CLIENT_GRANT_PASSWORD.getDesc())));
     }
 
     @DisplayName("Invalid user Id")
@@ -126,6 +130,7 @@ public class PasswordTokenTest extends IntegrationTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .params(params))
                 .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.error", is(ErrorType.INVALID_GRANT.getError())))
                 .andExpect(jsonPath("$.error_description", is(ErrorDesc.BAD_CREDENTIALS.getDesc())));
     }
@@ -139,6 +144,7 @@ public class PasswordTokenTest extends IntegrationTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .params(params))
                 .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.error", is(ErrorType.INVALID_GRANT.getError())))
                 .andExpect(jsonPath("$.error_description", is(ErrorDesc.BAD_CREDENTIALS.getDesc())));
     }
@@ -155,7 +161,8 @@ public class PasswordTokenTest extends IntegrationTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .params(params))
                 .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.error", is(ErrorType.INVALID_GRANT.getError())))
-                .andExpect(jsonPath("$.error_description", is(ErrorDesc.INSUFFICIENT_CLIENT_GRANT_CLIENT_CREDENTIALS.getDesc())));
+                .andExpect(jsonPath("$.error_description", is(ErrorDesc.INSUFFICIENT_CLIENT_GRANT_PASSWORD.getDesc())));
     }
 }

@@ -8,7 +8,7 @@ import com.berk2s.authorizationserver.repository.ClientRepository;
 import com.berk2s.authorizationserver.repository.UserRepository;
 import com.berk2s.authorizationserver.security.ClientAuthenticationProvider;
 import com.berk2s.authorizationserver.security.UserAuthenticationProvider;
-import com.berk2s.authorizationserver.services.impl.PasswordTokenServiceImpl;
+import com.berk2s.authorizationserver.services.impl.PasswordCodeTokenServiceImpl;
 import com.berk2s.authorizationserver.utils.AuthenticationParser;
 import com.berk2s.authorizationserver.web.exceptions.InvalidClientException;
 import com.berk2s.authorizationserver.web.exceptions.InvalidGrantException;
@@ -35,7 +35,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class PasswordTokenServiceTest extends TokenServiceTest {
+class PasswordCodeTokenServiceTest extends TokenServiceTest {
 
     @Mock
     ClientRepository clientRepository;
@@ -62,7 +62,7 @@ class PasswordTokenServiceTest extends TokenServiceTest {
     IdTokenService idTokenService;
 
     @InjectMocks
-    PasswordTokenServiceImpl passwordTokenService;
+    PasswordCodeTokenServiceImpl passwordTokenService;
 
     TokenRequestDto tokenRequest;
     String encodedAuthorization;
@@ -76,7 +76,7 @@ class PasswordTokenServiceTest extends TokenServiceTest {
         tokenRequest = TokenRequestDto.builder()
                 .clientId("clientId")
                 .clientSecret("clientSecret")
-                .grantType("client_credentials")
+                .grantType("password")
                 .scope("openid")
                 .build();
 
@@ -196,7 +196,7 @@ class PasswordTokenServiceTest extends TokenServiceTest {
             tokenResponse = passwordTokenService.getToken(encodedAuthorization, tokenRequest);
         } catch (InvalidClientException ex) {
             assertThat(ex.getMessage())
-                    .isEqualTo(ErrorDesc.INSUFFICIENT_CLIENT_GRANT_CLIENT_CREDENTIALS.getDesc());
+                    .isEqualTo(ErrorDesc.INSUFFICIENT_CLIENT_GRANT_PASSWORD.getDesc());
         } finally {
             if(tokenResponse != null) {
                 fail("Catch block didn't work");
@@ -216,7 +216,7 @@ class PasswordTokenServiceTest extends TokenServiceTest {
             tokenResponse = passwordTokenService.getToken(encodedAuthorization, tokenRequest);
         } catch (InvalidGrantException ex) {
             assertThat(ex.getMessage())
-                    .isEqualTo(ErrorDesc.INSUFFICIENT_CLIENT_GRANT_CLIENT_CREDENTIALS.getDesc());
+                    .isEqualTo(ErrorDesc.INSUFFICIENT_CLIENT_GRANT_PASSWORD.getDesc());
         } finally {
             if(tokenResponse != null) {
                 fail("Catch block didn't work");

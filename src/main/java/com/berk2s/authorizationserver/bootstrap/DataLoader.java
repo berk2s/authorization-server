@@ -80,6 +80,15 @@ public class DataLoader implements CommandLineRunner {
                 GrantType.AUTHORIZATION_CODE,
                 GrantType.TOKEN_EXCHANGE));
 
-        clientRepository.saveAll(Set.of(client, client2, client3, client4, client5));
+        Client client6 = new Client();
+        client6.setClientId("clientWithoutRefreshToken");
+        client6.setConfidential(false);
+        client6.setRedirectUris(Set.of(new URI("http://redirect-uri")));
+        client6.setGrantTypes(Set.of(GrantType.CLIENT_CREDENTIALS,
+                GrantType.PASSWORD,
+                GrantType.AUTHORIZATION_CODE,
+                GrantType.TOKEN_EXCHANGE));
+
+        clientRepository.saveAll(Set.of(client, client2, client3, client4, client5, client6));
     }
 }
