@@ -54,7 +54,12 @@ public enum ErrorDesc {
     /**
      * SecurityUserDetails Exception Descriptions
      */
-    INVALID_USER("Invalid user");
+    INVALID_USER("Invalid user"),
+    /*
+     * RegisterService Exception Descriptions
+     */
+    TAKEN_PHONE_NUMBER("Phone number is taken"),
+    TAKEN_EMAIL("E-Mail is taken");
 
     private final String desc;
 

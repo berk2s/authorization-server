@@ -1,6 +1,7 @@
 package com.berk2s.authorizationserver.security;
 
 import com.berk2s.authorizationserver.domain.user.User;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

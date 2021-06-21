@@ -1,0 +1,360 @@
+body {
+    font-family: 'Manrope', sans-serif;
+    background-color:#343A40;
+    padding:0;
+    margin:0;
+    overflow:hidden;
+}
+
+#app {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex:1;
+    width: 100%;
+    height: 100vh;
+}
+
+.box {
+    width: 344px;
+    background-color: #fff;
+    border-radius:12px;
+    padding:20px 20px;
+box-shadow: 0px 2px 4px rgba(97, 97, 97, 0.18), 0px 4px 8px rgba(97, 97, 97, 0.18);
+}
+
+
+.box-header {
+    display: flex;
+    flex-direction:column;
+    justify-content: space-between;
+    align-items: center;
+    width:100%;
+    height:60px;
+}
+
+.box-header h2 {
+    text-align:center;
+    font-weight: 600;
+    color: #343A40;
+}
+
+.box-header h4 {
+    text-align:center;
+    font-weight: 400;
+    color: #343A40;
+}
+
+.box-content {
+    padding: 20px 0 0 0;
+    display: flex;
+    flex-direction: column;
+}
+
+hr {
+    border:1px solid rgba(224, 224, 224, 1);
+    margin-top:20px;
+    margin-bottom:0px;
+}
+
+input[type=text], input[type=password] {
+    height:44px;
+    background: rgba(224, 224, 224, 0.5);
+    border-radius: 8px;
+    padding:0 12px;
+    font-weight: normal;
+    font-size:14px;
+    color: #000;
+    margin-bottom: 16px;
+    border: 1px solid transparent;
+    transition: 0.2s;
+}
+
+input[type=text]:focus, input[type=password]:focus {
+    background: #fff;
+    border: 1px solid #1672EC;
+    color: #000;
+}
+
+input[type=password] {
+    margin-bottom:10px;
+}
+
+input[type=text]:placeholder, input[type=password]:placeholder {
+    color: #414141;
+}
+
+button {
+    border-radius: 8px;
+    width: 100%;
+    height: 44px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    border:0;
+    cursor: pointer;
+    margin-top:16px;
+    transition: .3s;
+    font-size:14px;
+    letter-spacing: 0.05em;
+}
+
+
+button:focus {
+    outline: none;
+}
+
+.signin-btn {
+    background: #0F56B3;
+    box-shadow: 0px 1px 2px rgba(97, 97, 97, 0.2), 0px 2px 4px rgba(97, 97, 97, 0.2);
+    color: #C5DCFA;
+}
+
+.signin-btn:hover {
+    box-shadow: 0px 4px 8px rgba(97, 97, 97, 0.14), 0px 8px 16px rgba(97, 97, 97, 0.14);
+    color:#fff;
+}
+
+.signup-btn {
+    background: #FFFFFF;
+    border: 1px solid #C0C0C0;
+    color: #0F56B3;
+}
+
+.signup-btn:hover {
+    color: #000;
+    border: 1px solid #A1A1A1;
+    box-sizing: border-box;
+    box-shadow: 0px 2px 4px rgba(97, 97, 97, 0.18), 0px 4px 8px rgba(97, 97, 97, 0.18);
+}
+
+.signin-btn:hover {
+    box-shadow: 0px 4px 8px rgba(97, 97, 97, 0.14), 0px 8px 16px rgba(97, 97, 97, 0.14);
+    color:#fff;
+}
+
+.helper-text {
+    width: 100%;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.helper-text a {
+    font-size:12px;
+    font-weight: 400;
+    padding-right: 4px;
+    color: rgba(15, 86, 179, 1);
+}
+
+a {
+    color: #000;
+    text-decoration: none;
+
+}
+
+input {
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+
+input:focus {
+    outline: none;
+}
+
+p,span,h1,h2,h3,h4,h5,h6 {
+    margin:0;
+    padding:0;
+}
+
+.separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    font-weight:700;
+    font-size:12px;
+    color: #343A40;
+    margin-top:16px;
+
+}
+
+.separator::before,
+.separator::after {
+    content: '';
+    flex: 1;
+    border-bottom:2px solid rgba(224, 224, 224, 1);
+}
+
+.separator:not(:empty)::before {
+    margin-right: .25em;
+}
+
+.separator:not(:empty)::after {
+    margin-left: .25em;
+}
+
+.alert-box {
+    position:absolute;
+    z-index: 9999;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    min-width: 400px;
+    padding:0 18px;
+    transition: 1s ease; /* It slowly shows the element as we place the mouse on the box and when the time reaches 2 seconds, it is fully visible. */
+    border-radius: 12px;
+}
+
+.hide-alert {
+    bottom:-72px;
+    opacity: 0;
+}
+
+.show-alert {
+    bottom: 20px;
+    opacity: 1;
+}
+
+.icon-area {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    margin-right: 10px;
+}
+
+.warning-box .icon-area svg {
+    width: 18px;
+    height: 18px;
+    fill: #F6CA92;
+    color: #F6CA92;
+}
+.error-box .icon-area svg {
+    width: 18px;
+    height: 18px;
+    fill: #FAA09E;
+    color: #FAA09E;
+}
+
+.succesful-box .icon-area svg {
+    width: 18px;
+    height: 18px;
+    fill: #8CE590;
+    color: #8CE590;
+}
+
+.warning-box .alert-title {
+    color: #F6CA92;
+
+}
+
+.succesful-box .alert-title {
+    color: #8CE590;
+}
+.error-box .alert-title {
+    color: #FAA09E;
+}
+
+.alert-content {
+    margin-right: 12px;
+
+}
+
+.alert-title {
+    font-family: Manrope;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 150%;
+    /* identical to box height, or 24px */
+
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.005em;
+    font-feature-settings: 'tnum' on, 'lnum' on;
+
+    /* Orange / 02 */
+
+    margin-right: 10px;
+}
+
+.alert-desc {
+    font-family: Manrope;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 150%;
+    /* identical to box height, or 24px */
+
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.0168em;
+    font-feature-settings: 'tnum' on, 'lnum' on;
+    color: #fff;
+}
+
+.alert-content {
+    display: flex;
+    flex-direction: row;
+}
+
+.warning-box {
+    background: #7F4C0A;
+    box-shadow: 0px 4px 8px rgba(97, 97, 97, 0.14), 0px 8px 16px rgba(97, 97, 97, 0.14);
+}
+.succesful-box {
+    background: #155D18;
+    box-shadow: 0px 4px 8px rgba(97, 97, 97, 0.14), 0px 8px 16px rgba(97, 97, 97, 0.14);
+}
+.error-box {
+    background: #910B08;
+    box-shadow: 0px 4px 8px rgba(97, 97, 97, 0.14), 0px 8px 16px rgba(97, 97, 97, 0.14);
+}
+
+.lds-ring {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 32px;
+  height: 44px;
+}
+.lds-ring div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  margin: 8px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: #fff transparent transparent transparent;
+}
+.lds-ring div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+.lds-ring div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.lds-ring div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.form-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.form-group input {
+    width:41%!important;
+}
