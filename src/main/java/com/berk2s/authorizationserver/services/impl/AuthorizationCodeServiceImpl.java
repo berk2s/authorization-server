@@ -45,6 +45,8 @@ public class AuthorizationCodeServiceImpl implements AuthorizationCodeService {
                 throw new InvalidRequestException(ErrorDesc.INVALID_CODE.getDesc());
             }
 
+         //   authorizationCode.setCode(null);
+
             return authorizationCodeMapper.authorizationCodeToAuthorizationDto(authorizationCode);
         } catch (URISyntaxException e) {
             log.warn(e.getMessage() + "[clientId: {}]", clientId);

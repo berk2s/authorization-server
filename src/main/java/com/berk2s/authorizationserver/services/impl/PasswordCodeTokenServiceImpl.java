@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -59,12 +60,12 @@ public class PasswordCodeTokenServiceImpl implements PasswordCodeTokenService {
 
         clientAuthenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(clientId, clientSecret));
 
-        if(!client.isConfidential()) {
+        if (!client.isConfidential()) {
             log.warn("Public Client tried to request with password [clientId: {}]", clientId);
             throw new InvalidClientException(ErrorDesc.INSUFFICIENT_CLIENT_GRANT_PASSWORD.getDesc());
         }
 
-        if(!client.getGrantTypes().contains(GrantType.PASSWORD)) {
+        if (!client.getGrantTypes().contains(GrantType.PASSWORD)) {
             log.warn("Client tried to request password but it is not permitted to password [clientId: {}]", clientId);
             throw new InvalidGrantException(ErrorDesc.INSUFFICIENT_CLIENT_GRANT_PASSWORD.getDesc());
         }
@@ -87,7 +88,11 @@ public class PasswordCodeTokenServiceImpl implements PasswordCodeTokenService {
 
         SecurityUserDetails securityUserDetails = new SecurityUserDetails(user);
 
-        Set<String> scopes = new HashSet<>(Arrays.asList(tokenRequest.getScope().split(" ")));
+        Set<String> scopes = new HashSet<>();
+
+        if (tokenRequest.getScope() != null) {
+            Collections.addAll(scopes, tokenRequest.getScope().split(" "));
+        }
 
         TokenCommand refreshTokenCmd = TokenCommand.builder()
                 .userDetails(securityUserDetails)
@@ -118,7 +123,7 @@ public class PasswordCodeTokenServiceImpl implements PasswordCodeTokenService {
 
         IdTokenDto idToken = null;
 
-        if(scopes.stream().map(String::toUpperCase).anyMatch(s -> s.contains(ScopeConfig.OPENID.name()))) {
+        if (scopes.stream().map(String::toUpperCase).anyMatch(s -> s.contains(ScopeConfig.OPENID.name()))) {
             idToken = idTokenService.createToken(idTokenCmd);
         }
 

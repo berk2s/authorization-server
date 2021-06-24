@@ -53,7 +53,6 @@ public class JWTServiceImpl implements JWTService {
                     .jwtID(idGenerator.generateId().toString());
 
             jwtClaimsSetBuilder.claim("nonce", jwtCommand.getNonce());
-            jwtClaimsSetBuilder.claim("scope", String.join(" ", jwtCommand.getScopes()));
             jwtClaimsSetBuilder.claim("username", String.join(" ", userDetails.getUsername()));
             for (Map.Entry<String, Object> claim: jwtCommand.getClaims().entrySet()) {
                 jwtClaimsSetBuilder.claim(claim.getKey(), claim.getValue());

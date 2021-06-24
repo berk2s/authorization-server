@@ -28,9 +28,9 @@ authorization-server:
   issuer: http://localhost:${server.port}
   access-token:
     default-format: jwt
-    lifetime: 1m
+    lifetime: 10m
   id-token:
-    lifetime: 1m
+    lifetime: 10m
   refresh-token:
     lifetime: 8h
     max-lifetime: 8h

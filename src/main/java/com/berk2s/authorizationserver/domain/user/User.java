@@ -47,4 +47,14 @@ public class User extends BaseEntity {
     @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
     private Set<Role> roles = new HashSet<>();
 
+    public void addAuthority(Authority authority) {
+        authorities.add(authority);
+        authority.getUsers().add(this);
+    }
+
+    public void addRole(Role role) {
+        roles.add(role);
+        role.getUsers().add(this);
+    }
+
 }

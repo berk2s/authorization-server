@@ -67,6 +67,8 @@ public class DiscoveryServiceImpl implements DiscoveryService {
 
         discoveryDto.getTokenEndpointAuthSigningAlgValuesSupported().add("RS256");
 
+        log.info("Discovery is created");
+
         return discoveryDto;
     }
 }

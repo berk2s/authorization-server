@@ -3,10 +3,15 @@ package com.berk2s.authorizationserver.bootstrap;
 import com.berk2s.authorizationserver.config.ServerConfiguration;
 import com.berk2s.authorizationserver.domain.oauth.Client;
 import com.berk2s.authorizationserver.domain.oauth.GrantType;
+import com.berk2s.authorizationserver.domain.user.Authority;
+import com.berk2s.authorizationserver.domain.user.Role;
 import com.berk2s.authorizationserver.domain.user.User;
+import com.berk2s.authorizationserver.repository.AuthorityRepository;
 import com.berk2s.authorizationserver.repository.ClientRepository;
+import com.berk2s.authorizationserver.repository.RoleRepository;
 import com.berk2s.authorizationserver.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,6 +21,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Set;
 
+@Slf4j
 @Profile("local")
 @RequiredArgsConstructor
 @Component
@@ -24,6 +30,8 @@ public class DataLoader implements CommandLineRunner {
     private final ClientRepository clientRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final AuthorityRepository authorityRepository;
+    private final RoleRepository roleRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -31,6 +39,8 @@ public class DataLoader implements CommandLineRunner {
     }
 
     private void loadClients() throws URISyntaxException {
+
+
         User user = new User();
         user.setUsername("username");
         user.setPassword(passwordEncoder.encode("password"));
@@ -43,7 +53,33 @@ public class DataLoader implements CommandLineRunner {
         user.setAccountNonExpired(true);
         user.setCredentialsNonExpired(true);
 
+
         userRepository.save(user);
+
+        Authority authority = new Authority();
+        authority.setAuthorityName("WRITE_BASKET");
+        authority.addUsers(user);
+
+        Authority authority2 = new Authority();
+        authority2.setAuthorityName("READ_BASKET");
+        authority2.addUsers(user);
+
+        Role role = new Role();
+        role.setRoleName("USER");
+        role.addUser(user);
+
+        authorityRepository.saveAll(Set.of(authority, authority2));
+        roleRepository.save(role);
+
+        log.info("\n\n\n\n Created User Id: "
+            + user.getId().toString()
+            + "\n\n\n\n");
+        log.info("\n\n\n\n Created Role Size: "
+            + user.getRoles().size()
+            + "\n\n\n\n");
+        log.info("\n\n\n\n Created Authority Size: "
+            + user.getAuthorities().size()
+            + "\n\n\n\n");
 
         Client client = new Client();
         client.setClientId("clientId");

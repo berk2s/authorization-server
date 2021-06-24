@@ -10,11 +10,13 @@ import com.berk2s.authorizationserver.web.models.token.JWTCommand;
 import com.berk2s.authorizationserver.web.models.token.TokenCommand;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -27,16 +29,10 @@ public class AccessTokenServiceImpl implements AccessTokenService {
     public AccessTokenDto createToken(TokenCommand tokenCommand) {
         LocalDateTime expiryDateTime = LocalDateTime.now().plusMinutes(tokenCommand.getDuration().toMinutes());
 
-        SecurityDetails userDetails;
-
-        if(tokenCommand.getUserDetails() instanceof SecurityUserDetails) {
-            userDetails = (SecurityUserDetails) tokenCommand.getUserDetails();
-        } else {
-            userDetails = (SecurityClientDetails) tokenCommand.getUserDetails();
-        }
+        SecurityUserDetails userDetails = (SecurityUserDetails) tokenCommand.getUserDetails();
 
         Map<String, Object> claims = new HashMap<>();
-        claims.put("authorities", userDetails.getAuthorities());
+        claims.put("authorities", userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
 
         JWTCommand jwtCommand = JWTCommand.builder()
                 .userDetails(tokenCommand.getUserDetails())
