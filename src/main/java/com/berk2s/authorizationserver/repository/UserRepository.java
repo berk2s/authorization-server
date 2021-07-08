@@ -15,16 +15,16 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     Optional<User> findByPhoneNumber(String phoneNumber);
 
-    @Query("select count(u)>0 from User u where u.phoneNumber = ?1 or u.email = ?2")
+    @Query("select count(u)>0 from USERS u where u.phoneNumber = ?1 or u.email = ?2")
     boolean isUserExists(String phoneNumber, String email);
 
-    @Query("select count(u)>0 from User u where u.username = ?1")
+    @Query("select count(u)>0 from USERS u where u.username = ?1")
     boolean isUsernameTaken(String username);
 
-    @Query("select count(u)>0 from User u where u.phoneNumber = ?1")
+    @Query("select count(u)>0 from USERS u where u.phoneNumber = ?1")
     boolean isPhoneNumberTaken(String phoneNumber);
 
-    @Query("select count(u)>0 from User u where u.email = ?1")
+    @Query("select count(u)>0 from USERS u where u.email = ?1")
     boolean isEmailTaken(String email);
 
 }

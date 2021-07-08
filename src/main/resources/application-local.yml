@@ -2,24 +2,17 @@ server:
   port: 8080
 
 spring:
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/authserver
+    username: root
+    password:
+  jpa:
+    hibernate.ddl-auto: create
+    generate-ddl: true
+    show-sql: true
   redis:
     host: 192.168.1.37
-  jpa:
-    properties:
-      hibernate:
-        show-sql: true
-        use-sql-comments: true
-        format-sql: true
-    #   open-in-view: false
-    database-platform: org.hibernate.dialect.H2Dialect
-  datasource:
-    url: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
-  h2:
-    console:
-      enabled: true
 
 authorization-server:
   login-url: /signin

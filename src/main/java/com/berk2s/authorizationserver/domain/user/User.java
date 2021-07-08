@@ -12,7 +12,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity
+@Entity(name = "USERS")
 public class User extends BaseEntity {
 
     @Column(name = "username", unique = true)

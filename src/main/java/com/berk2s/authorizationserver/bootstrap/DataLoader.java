@@ -40,108 +40,142 @@ public class DataLoader implements CommandLineRunner {
 
     private void loadClients() throws URISyntaxException {
 
-
-        User user = new User();
-        user.setUsername("username");
-        user.setPassword(passwordEncoder.encode("password"));
-        user.setLastName("lastname");
-        user.setFirstName("firstname");
-        user.setPhoneNumber("phone");
-        user.setEmail("email");
-        user.setAccountNonLocked(true);
-        user.setEnabled(true);
-        user.setAccountNonExpired(true);
-        user.setCredentialsNonExpired(true);
-
-
-        userRepository.save(user);
-
-        Authority authority = new Authority();
-        authority.setAuthorityName("WRITE_BASKET");
-        authority.addUsers(user);
-
-        Authority authority2 = new Authority();
-        authority2.setAuthorityName("READ_BASKET");
-        authority2.addUsers(user);
-
-        Role role = new Role();
-        role.setRoleName("USER");
-        role.addUser(user);
-
-        authorityRepository.saveAll(Set.of(authority, authority2));
-        roleRepository.save(role);
-
-        log.info("\n\n\n\n Created User Id: "
-            + user.getId().toString()
-            + "\n\n\n\n");
-        log.info("\n\n\n\n Created Role Size: "
-            + user.getRoles().size()
-            + "\n\n\n\n");
-        log.info("\n\n\n\n Created Authority Size: "
-            + user.getAuthorities().size()
-            + "\n\n\n\n");
-
-        Client client = new Client();
-        client.setClientId("clientId");
-        client.setClientSecret(passwordEncoder.encode(""));
-        client.setConfidential(false);
-        client.setRedirectUris(Set.of(new URI("http://localhost:4200"), new URI("http://redirect-uri")));
-        client.setGrantTypes(Set.of(GrantType.AUTHORIZATION_CODE,
-                GrantType.PASSWORD,
-                GrantType.REFRESH_TOKEN,
-                GrantType.CLIENT_CREDENTIALS,
-                GrantType.TOKEN_EXCHANGE));
-
-        Client client2 = new Client();
-        client2.setClientId("clientWithoutCode");
-        client2.setConfidential(false);
-        client2.setRedirectUris(Set.of(new URI("http://redirect-uri")));
-        client2.setGrantTypes(Set.of(GrantType.PASSWORD,
-                GrantType.REFRESH_TOKEN,
-                GrantType.CLIENT_CREDENTIALS,
-                GrantType.TOKEN_EXCHANGE));
-
-        Client client3 = new Client();
-        client3.setClientId("clientWithSecret");
-        client3.setClientSecret(passwordEncoder.encode("clientSecret"));
-        client3.setConfidential(true);
-        client3.setRedirectUris(Set.of(new URI("http://redirect-uri")));
-        client3.setGrantTypes(Set.of(GrantType.AUTHORIZATION_CODE,
-                GrantType.PASSWORD,
-                GrantType.REFRESH_TOKEN,
-                GrantType.CLIENT_CREDENTIALS,
-                GrantType.TOKEN_EXCHANGE));
+        if (!userRepository.isEmailTaken("email")) {
+            User user = new User();
+            user.setUsername("username");
+            user.setPassword(passwordEncoder.encode("password"));
+            user.setLastName("lastname");
+            user.setFirstName("firstname");
+            user.setPhoneNumber("phone");
+            user.setEmail("email");
+            user.setAccountNonLocked(true);
+            user.setEnabled(true);
+            user.setAccountNonExpired(true);
+            user.setCredentialsNonExpired(true);
 
 
-        Client client4 = new Client();
-        client4.setClientId("clientWithoutClientCredentials");
-        client3.setClientSecret(passwordEncoder.encode("clientSecret"));
-        client4.setConfidential(true);
-        client4.setRedirectUris(Set.of(new URI("http://redirect-uri")));
-        client4.setGrantTypes(Set.of(GrantType.PASSWORD,
-                GrantType.REFRESH_TOKEN,
-                GrantType.AUTHORIZATION_CODE,
-                GrantType.TOKEN_EXCHANGE));
+            userRepository.save(user);
 
-        Client client5 = new Client();
-        client5.setClientId("clientWithoutPassword");
-        client5.setClientSecret(passwordEncoder.encode("clientSecret"));
-        client5.setConfidential(true);
-        client5.setRedirectUris(Set.of(new URI("http://redirect-uri")));
-        client5.setGrantTypes(Set.of(GrantType.CLIENT_CREDENTIALS,
-                GrantType.REFRESH_TOKEN,
-                GrantType.AUTHORIZATION_CODE,
-                GrantType.TOKEN_EXCHANGE));
+            Authority authority = new Authority();
+            authority.setAuthorityName("WRITE_BASKET");
+            authority.addUsers(user);
 
-        Client client6 = new Client();
-        client6.setClientId("clientWithoutRefreshToken");
-        client6.setConfidential(false);
-        client6.setRedirectUris(Set.of(new URI("http://redirect-uri")));
-        client6.setGrantTypes(Set.of(GrantType.CLIENT_CREDENTIALS,
-                GrantType.PASSWORD,
-                GrantType.AUTHORIZATION_CODE,
-                GrantType.TOKEN_EXCHANGE));
+            Authority authority2 = new Authority();
+            authority2.setAuthorityName("READ_BASKET");
+            authority2.addUsers(user);
 
-        clientRepository.saveAll(Set.of(client, client2, client3, client4, client5, client6));
+            Authority authority3 = new Authority();
+            authority3.setAuthorityName("DELETE_BASKET");
+            authority3.addUsers(user);
+
+            Authority authority4 = new Authority();
+            authority4.setAuthorityName("UPDATE_BASKET");
+            authority4.addUsers(user);
+
+            Authority authority5 = new Authority();
+            authority5.setAuthorityName("READ_COURSE");
+            authority5.addUsers(user);
+
+            Authority authority6 = new Authority();
+            authority6.setAuthorityName("WRITE_COURSE");
+            authority6.addUsers(user);
+
+            Authority authority7 = new Authority();
+            authority7.setAuthorityName("UPDATE_COURSE");
+            authority7.addUsers(user);
+
+            Authority authority8 = new Authority();
+            authority8.setAuthorityName("DELETE_COURSE");
+            authority8.addUsers(user);
+
+            Role role = new Role();
+            role.setRoleName("USER");
+            role.addUser(user);
+
+            authorityRepository.saveAll(Set.of(authority,
+                    authority2,
+                    authority3,
+                    authority4,
+                    authority5,
+                    authority6,
+                    authority7,
+                    authority8
+                    ));
+            roleRepository.save(role);
+
+            log.info("\n\n\n\n Created User Id: "
+                    + user.getId().toString()
+                    + "\n\n\n\n");
+            log.info("\n\n\n\n Created Role Size: "
+                    + user.getRoles().size()
+                    + "\n\n\n\n");
+            log.info("\n\n\n\n Created Authority Size: "
+                    + user.getAuthorities().size()
+                    + "\n\n\n\n");
+
+            Client client = new Client();
+            client.setClientId("clientId");
+            client.setClientSecret(passwordEncoder.encode(""));
+            client.setConfidential(false);
+            client.setRedirectUris(Set.of(new URI("http://localhost:4200"), new URI("http://redirect-uri")));
+            client.setGrantTypes(Set.of(GrantType.AUTHORIZATION_CODE,
+                    GrantType.PASSWORD,
+                    GrantType.REFRESH_TOKEN,
+                    GrantType.CLIENT_CREDENTIALS,
+                    GrantType.TOKEN_EXCHANGE));
+
+            Client client2 = new Client();
+            client2.setClientId("clientWithoutCode");
+            client2.setConfidential(false);
+            client2.setRedirectUris(Set.of(new URI("http://redirect-uri")));
+            client2.setGrantTypes(Set.of(GrantType.PASSWORD,
+                    GrantType.REFRESH_TOKEN,
+                    GrantType.CLIENT_CREDENTIALS,
+                    GrantType.TOKEN_EXCHANGE));
+
+            Client client3 = new Client();
+            client3.setClientId("clientWithSecret");
+            client3.setClientSecret(passwordEncoder.encode("clientSecret"));
+            client3.setConfidential(true);
+            client3.setRedirectUris(Set.of(new URI("http://redirect-uri")));
+            client3.setGrantTypes(Set.of(GrantType.AUTHORIZATION_CODE,
+                    GrantType.PASSWORD,
+                    GrantType.REFRESH_TOKEN,
+                    GrantType.CLIENT_CREDENTIALS,
+                    GrantType.TOKEN_EXCHANGE));
+
+
+            Client client4 = new Client();
+            client4.setClientId("clientWithoutClientCredentials");
+            client3.setClientSecret(passwordEncoder.encode("clientSecret"));
+            client4.setConfidential(true);
+            client4.setRedirectUris(Set.of(new URI("http://redirect-uri")));
+            client4.setGrantTypes(Set.of(GrantType.PASSWORD,
+                    GrantType.REFRESH_TOKEN,
+                    GrantType.AUTHORIZATION_CODE,
+                    GrantType.TOKEN_EXCHANGE));
+
+            Client client5 = new Client();
+            client5.setClientId("clientWithoutPassword");
+            client5.setClientSecret(passwordEncoder.encode("clientSecret"));
+            client5.setConfidential(true);
+            client5.setRedirectUris(Set.of(new URI("http://redirect-uri")));
+            client5.setGrantTypes(Set.of(GrantType.CLIENT_CREDENTIALS,
+                    GrantType.REFRESH_TOKEN,
+                    GrantType.AUTHORIZATION_CODE,
+                    GrantType.TOKEN_EXCHANGE));
+
+            Client client6 = new Client();
+            client6.setClientId("clientWithoutRefreshToken");
+            client6.setConfidential(false);
+            client6.setRedirectUris(Set.of(new URI("http://redirect-uri")));
+            client6.setGrantTypes(Set.of(GrantType.CLIENT_CREDENTIALS,
+                    GrantType.PASSWORD,
+                    GrantType.AUTHORIZATION_CODE,
+                    GrantType.TOKEN_EXCHANGE));
+
+            clientRepository.saveAll(Set.of(client, client2, client3, client4, client5, client6));
+        }
+
     }
 }

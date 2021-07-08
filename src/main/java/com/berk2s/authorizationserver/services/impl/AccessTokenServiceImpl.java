@@ -29,10 +29,17 @@ public class AccessTokenServiceImpl implements AccessTokenService {
     public AccessTokenDto createToken(TokenCommand tokenCommand) {
         LocalDateTime expiryDateTime = LocalDateTime.now().plusMinutes(tokenCommand.getDuration().toMinutes());
 
-        SecurityUserDetails userDetails = (SecurityUserDetails) tokenCommand.getUserDetails();
+        SecurityDetails userDetails;
+
+        if(tokenCommand.getUserDetails() instanceof SecurityUserDetails) {
+            userDetails = (SecurityUserDetails) tokenCommand.getUserDetails();
+        } else {
+            userDetails = (SecurityClientDetails) tokenCommand.getUserDetails();
+        }
 
         Map<String, Object> claims = new HashMap<>();
-        claims.put("authorities", userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
+        claims.put("scopes", userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).filter(authority -> !authority.startsWith("ROLE_")).collect(Collectors.toList()));
+        claims.put("roles", userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).filter(authority -> authority.startsWith("ROLE_")).collect(Collectors.toList()));
 
         JWTCommand jwtCommand = JWTCommand.builder()
                 .userDetails(tokenCommand.getUserDetails())
