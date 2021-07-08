@@ -16,6 +16,8 @@ import com.nimbusds.jwt.SignedJWT;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.IdGenerator;
 
@@ -89,4 +91,6 @@ public class JWTServiceImpl implements JWTService {
             throw new JWTException(ErrorDesc.SERVER_ERROR.getDesc());
         }
     }
+
+
 }

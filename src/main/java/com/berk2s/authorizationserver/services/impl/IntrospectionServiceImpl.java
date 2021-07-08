@@ -22,6 +22,8 @@ import com.berk2s.authorizationserver.web.models.token.TokenType;
 import com.nimbusds.jwt.JWTClaimsSet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +40,7 @@ public class IntrospectionServiceImpl implements IntrospectionService {
     private final JWTService jwtService;
     private final UserRepository userRepository;
     private final ClientRepository clientRepository;
+
 
     @Override
     public IntrospectionResponseDto getTokenInfo(String authenticationHeader, IntrospectionRequestDto introspectionRequest) {

@@ -33,6 +33,10 @@ public class User extends BaseEntity {
     @Column(name = "phone_number", unique = true)
     private String phoneNumber;
 
+    private boolean isEmailVerified;
+
+    private boolean isPhoneNumberVerified;
+
     private boolean isAccountNonExpired;
 
     private boolean isAccountNonLocked;

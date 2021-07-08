@@ -43,7 +43,7 @@ public class UserInfoTest extends IntegrationTest {
                 .userDetails(new SecurityUserDetails(user))
                 .nonce("nonce")
                 .clientId("clientId")
-                .scopes(Set.of("openid userinfo"))
+                .scopes(Set.of("openid", "userinfo"))
                 .duration(serverConfiguration.getAccessToken().getLifetime())
                 .build();
 

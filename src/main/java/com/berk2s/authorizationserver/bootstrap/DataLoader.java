@@ -52,7 +52,8 @@ public class DataLoader implements CommandLineRunner {
             user.setEnabled(true);
             user.setAccountNonExpired(true);
             user.setCredentialsNonExpired(true);
-
+            user.setPhoneNumberVerified(true);
+            user.setEmailVerified(true);
 
             userRepository.save(user);
 

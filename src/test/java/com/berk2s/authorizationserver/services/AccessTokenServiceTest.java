@@ -50,7 +50,7 @@ class AccessTokenServiceTest {
         tokenCommand = TokenCommand.builder()
                 .userDetails(securityUserDetails)
                 .clientId("clientId")
-                .scopes(Set.of("scope", "openid"))
+                .scopes(Set.of("openid"))
                 .nonce("nonce")
                 .duration(Duration.ofHours(1))
                 .build();

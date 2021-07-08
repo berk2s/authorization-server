@@ -3,6 +3,7 @@ package com.berk2s.authorizationserver.services.impl;
 import com.berk2s.authorizationserver.config.ServerConfiguration;
 import com.berk2s.authorizationserver.domain.oauth.Client;
 import com.berk2s.authorizationserver.domain.oauth.GrantType;
+import com.berk2s.authorizationserver.domain.user.Authority;
 import com.berk2s.authorizationserver.domain.user.User;
 import com.berk2s.authorizationserver.repository.ClientRepository;
 import com.berk2s.authorizationserver.repository.UserRepository;
@@ -24,6 +25,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.util.Locale;
 import java.util.UUID;
 
 @Slf4j
