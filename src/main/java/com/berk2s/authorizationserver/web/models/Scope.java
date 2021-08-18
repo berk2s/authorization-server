@@ -6,5 +6,6 @@ public enum Scope {
     EMAIL,
     ADDRESS,
     PHONE,
-    PROFILE
+    PROFILE,
+    USERINFO
 }

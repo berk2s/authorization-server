@@ -1,6 +1,9 @@
 package com.berk2s.authorizationserver.security;
 
+import com.berk2s.authorizationserver.domain.user.Authority;
+import com.berk2s.authorizationserver.domain.user.Role;
 import com.berk2s.authorizationserver.domain.user.User;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,13 +23,13 @@ public class SecurityUserDetails extends SecurityDetails implements UserDetails 
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
 
-        user.getAuthorities().stream()
-                .map(a -> grantedAuthorities.add(new SimpleGrantedAuthority(a.getAuthorityName().toUpperCase(Locale.ROOT))))
-                .close();
+        for (Authority authority : user.getAuthorities()) {
+            grantedAuthorities.add(new SimpleGrantedAuthority(authority.getAuthorityName().toUpperCase(Locale.ROOT)));
+        }
 
-        user.getRoles().stream()
-                .map(r -> grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + r.getRoleName().toUpperCase(Locale.ROOT))))
-                .close();
+        for (Role role : user.getRoles()) {
+            grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + role.getRoleName().toUpperCase(Locale.ROOT)));
+        }
 
         return grantedAuthorities;
     }

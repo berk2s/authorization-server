@@ -16,6 +16,8 @@ import com.nimbusds.jwt.SignedJWT;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.IdGenerator;
 
@@ -53,7 +55,6 @@ public class JWTServiceImpl implements JWTService {
                     .jwtID(idGenerator.generateId().toString());
 
             jwtClaimsSetBuilder.claim("nonce", jwtCommand.getNonce());
-            jwtClaimsSetBuilder.claim("scope", String.join(" ", jwtCommand.getScopes()));
             jwtClaimsSetBuilder.claim("username", String.join(" ", userDetails.getUsername()));
             for (Map.Entry<String, Object> claim: jwtCommand.getClaims().entrySet()) {
                 jwtClaimsSetBuilder.claim(claim.getKey(), claim.getValue());
@@ -90,4 +91,6 @@ public class JWTServiceImpl implements JWTService {
             throw new JWTException(ErrorDesc.SERVER_ERROR.getDesc());
         }
     }
+
+
 }

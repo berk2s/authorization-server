@@ -54,7 +54,16 @@ public enum ErrorDesc {
     /**
      * SecurityUserDetails Exception Descriptions
      */
-    INVALID_USER("Invalid user");
+    INVALID_USER("Invalid user"),
+    /*
+     * RegisterService Exception Descriptions
+     */
+    TAKEN_PHONE_NUMBER("Phone number is taken"),
+    TAKEN_EMAIL("E-Mail is taken"),
+    /*
+     * Invalid Scope Exception Descriptions
+     */
+    USER_HAS_NOT_SCOPE("The requested scopes are not available to the User");
 
     private final String desc;
 

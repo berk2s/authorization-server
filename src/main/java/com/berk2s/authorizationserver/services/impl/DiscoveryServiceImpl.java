@@ -40,6 +40,7 @@ public class DiscoveryServiceImpl implements DiscoveryService {
         discoveryDto.getScopesSupported().add(Scope.OPENID.name().toLowerCase());
         discoveryDto.getScopesSupported().add(Scope.OFFLINE_ACCESS.name().toLowerCase());
         discoveryDto.getScopesSupported().add(Scope.PROFILE.name().toLowerCase());
+        discoveryDto.getScopesSupported().add(Scope.USERINFO.name().toLowerCase());
         discoveryDto.getScopesSupported().add(Scope.EMAIL.name().toLowerCase());
         discoveryDto.getScopesSupported().add(Scope.PHONE.name().toLowerCase());
         discoveryDto.getScopesSupported().add(Scope.ADDRESS.name().toLowerCase());
@@ -66,6 +67,8 @@ public class DiscoveryServiceImpl implements DiscoveryService {
         discoveryDto.getClaimsSupported().add("username"); // TODO: enhance claims
 
         discoveryDto.getTokenEndpointAuthSigningAlgValuesSupported().add("RS256");
+
+        log.info("Discovery is created");
 
         return discoveryDto;
     }

@@ -23,6 +23,7 @@ public class IdTokenServiceImpl implements IdTokenService {
 
     private final JWTService jwtService;
 
+
     @Override
     public IdTokenDto createToken(TokenCommand tokenCommand) {
         LocalDateTime expiryDateTime = LocalDateTime.now().plusMinutes(tokenCommand.getDuration().toMinutes());
@@ -34,7 +35,7 @@ public class IdTokenServiceImpl implements IdTokenService {
                 + " "
                 + securityUserDetails.getLastName());
         claims.put("given_name", securityUserDetails.getName());
-        claims.put("scopes",  "openid profile offline_access");
+        claims.put("scopes",  tokenCommand.getScopes());
         claims.put("profile",  securityUserDetails.getLastName());
         claims.put("last_name",  securityUserDetails.getLastName());
 

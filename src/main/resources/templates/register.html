@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>Authorization Server - Sign in</title>
+
+    <link rel="stylesheet" href="css/styles.css">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+</head>
+
+<div id="app">
+
+    <div class="box">
+        <div class="box-header">
+            <h2>Sign Up</h2>
+            <h4>Create an account</h4>
+        </div>
+        <hr />
+        <div class="box-content">
+            <div class="form-group">
+                <input type="text" id="firstName" placeholder="First name" />
+
+                <input type="text" id="lastName" placeholder="Last name" />
+            </div>
+
+
+            <input type="text" id="email" placeholder="E-Mail" />
+
+            <input type="text" id="phoneNumber" placeholder="Phone number" />
+
+            <div class="form-group">
+
+                <input type="password" id="password" placeholder="Password" />
+
+                <input type="password" id="passwordConfirm" placeholder="Password confirm" />
+
+            </div>
+
+            <span class="helper-text"><a href="">Forgot password?</a></span>
+
+            <button class="signin-btn" id="signInBtn">Sign Up</button>
+
+            <div class="separator">Already have an account?</div>
+
+            <button class="signup-btn">Sign In</button>
+
+        </div>
+    </div>
+
+    <div class="alert-box hide-alert" id="alertbox">
+        <div class="icon-area" id="alertIcon">
+        </div>
+        <div class="alert-content">
+            <span class="alert-title" id="alertTitle">
+            </span>
+
+            <span class="alert-desc" id="alertDesc">
+            </span>
+        </div>
+    </div>
+
+</div>
+
+<body>
+<script src="js/register.js"></script>
+</body>
+</html>

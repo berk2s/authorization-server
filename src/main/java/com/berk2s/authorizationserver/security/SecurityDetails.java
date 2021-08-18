@@ -1,7 +1,9 @@
 package com.berk2s.authorizationserver.security;
 
 import com.berk2s.authorizationserver.domain.BaseEntity;
+import org.springframework.security.core.GrantedAuthority;
 
+import java.util.Collection;
 import java.util.UUID;
 
 public abstract class SecurityDetails {
@@ -16,7 +18,7 @@ public abstract class SecurityDetails {
         return entity.getId();
     }
 
-    public Object getAuthorities() {
+    public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
     }
 

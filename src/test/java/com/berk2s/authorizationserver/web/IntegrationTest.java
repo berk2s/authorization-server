@@ -51,6 +51,9 @@ public abstract class IntegrationTest {
         Role role = new Role();
         role.setRoleName(RandomStringUtils.random(6, true, false).toUpperCase(Locale.ROOT));
 
+        Role role2 = new Role();
+        role2.setRoleName(RandomStringUtils.random(6, true, false).toUpperCase(Locale.ROOT));
+
         Authority authority = new Authority();
         authority.setAuthorityName(RandomStringUtils.random(6, true, false).toUpperCase(Locale.ROOT));
 
@@ -67,10 +70,12 @@ public abstract class IntegrationTest {
         user.setAccountNonLocked(true);
 
         role.addUser(user);
+        role2.addUser(user);
         authority.addUsers(user);
 
         userRepository.save(user);
         roleRepository.save(role);
+        roleRepository.save(role2);
         authorityRepository.save(authority);
         return user;
     }

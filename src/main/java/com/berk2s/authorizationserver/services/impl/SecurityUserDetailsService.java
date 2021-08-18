@@ -22,7 +22,7 @@ public class SecurityUserDetailsService implements UserDetailsService {
     public SecurityUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> {
-                    log.warn("Cannot find User [username: {}}", username);
+                    log.warn("Cannot find User [username: {}]", username);
                     throw new UsernameNotFoundException(ErrorDesc.INVALID_USER.getDesc());
                 });
 

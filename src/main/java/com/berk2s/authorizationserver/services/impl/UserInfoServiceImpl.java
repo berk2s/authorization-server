@@ -13,6 +13,8 @@ import com.berk2s.authorizationserver.web.models.UserInfoDto;
 import com.nimbusds.jwt.JWTClaimsSet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -26,8 +28,11 @@ public class UserInfoServiceImpl implements UserInfoService {
     private final JWTService jwtService;
     private final UserRepository userRepository;
 
+    @PreAuthorize("hasAuthority('OFFLINE_ACCESS')")
+    @PostAuthorize("returnObject.getSub() == authentication.principal.getSubject()")
     @Override
     public UserInfoDto getUserInfo(String authorizationHeader) {
+
         String token = AuthenticationParser.bearerParser(authorizationHeader);
 
         JWTClaimsSet jwtClaimsSet = jwtService.parseAndValidate(token);
@@ -49,9 +54,15 @@ public class UserInfoServiceImpl implements UserInfoService {
                 .profile(user.getUsername())
                 .roles(user.getRoles().stream().map(Role::getRoleName).collect(Collectors.toSet()))
                 .authorities(user.getAuthorities().stream().map(Authority::getAuthorityName).collect(Collectors.toSet()))
+                .givenName(user.getFirstName())
                 .firstName(user.getFirstName())
+                .familyName(user.getLastName())
                 .lastName(user.getLastName())
                 .preferredUsername(user.getUsername())
+                .phoneNumber(user.getPhoneNumber())
+                .phoneNumberVerified(user.isPhoneNumberVerified())
+                .email(user.getEmail())
+                .emailVerified(user.isEmailVerified())
                 .build();
     }
 }
